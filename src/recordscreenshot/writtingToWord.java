@@ -6,16 +6,11 @@
 package recordscreenshot;
 
 import frames.MainUI;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
-import javax.swing.text.Document;
-import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -41,24 +36,24 @@ public class writtingToWord extends MainUI{
             //looping this section
             File imgFile;
             String imgFileName;
-            FileInputStream sl;
+            FileInputStream sl=null;
             String arrayVal0;
             String arrayVal1;
 //            for(int i=0;i<2;i++){
-                for(int j=0;j<5;j++){
-                    storing.displayArr();
+                for(int j=0;j<100;j++){
+//                    storing.displayArr();
                     storing.arrayValidator();
                     arrayVal0=StoringCommShots.arr[0][j];
                     arrayVal1=StoringCommShots.arr[1][j];
                    
-                        if(arrayVal1.isEmpty()){
+                        if(arrayVal1.isEmpty()&&!arrayVal0.isEmpty()){
                             imgFile=new File(arrayVal0);
                             imgFileName=imgFile.getName();
                             sl=new FileInputStream(imgFile);
                             run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(500), Units.toEMU(500));
                              run.addCarriageReturn();
 
-                        }else{
+                        }else if(!arrayVal1.isEmpty()&&!arrayVal0.isEmpty()){
                             run.setText(arrayVal1);
                             run.addCarriageReturn();
 
@@ -68,7 +63,7 @@ public class writtingToWord extends MainUI{
                             run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(500), Units.toEMU(500));
                              run.addCarriageReturn();
                         }
-                        sl.close();
+//                        sl.close();
                     }
                 
 //            }
@@ -94,9 +89,9 @@ public class writtingToWord extends MainUI{
             document.write(out);
             
             out.close();
-//            sl.close();
+            sl.close();
             document.close();
-            System.out.println("createdocument.docx written successully");
+//            System.out.println("createdocument.docx written successully");
         }catch(FileNotFoundException e){
             System.out.println(e);
         }catch(IOException io){
