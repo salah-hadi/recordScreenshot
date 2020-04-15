@@ -18,10 +18,10 @@ public class RecordScreenshot {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-         writtingToWord wr=new writtingToWord();
-//        MainUI mu=new MainUI();
-//        mu.setVisible(true);
-//        mu.setLocationRelativeTo(null);
+//         writtingToWord wr=new writtingToWord();
+        MainUI mu=new MainUI();
+        mu.setVisible(true);
+        mu.setLocationRelativeTo(null);
     }
     
 }
