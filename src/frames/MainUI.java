@@ -11,6 +11,8 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import recordscreenshot.StoringCommShots;
@@ -37,7 +39,7 @@ public class MainUI extends javax.swing.JFrame {
 //        storing=new StoringCommShots();
 //
 //    }
-    int shotName=0;
+    public static int shotName=0;
     public StoringCommShots storing;
     /**
      * This method is called from within the constructor to initialize the form.
@@ -229,7 +231,7 @@ public class MainUI extends javax.swing.JFrame {
                         .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,11 +310,13 @@ public class MainUI extends javax.swing.JFrame {
 
     private void captureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureBtnActionPerformed
         // TODO add your handling code here:
+        
+        /**on capture make it check till the first null then add in, or on removing, reduce shot name parameters*/
         this.setState(1);
 
         validateComment(Integer.toString(shotName));
         this.setState(0);
-        shotName=shotName+1;
+//        shotName=shotName+1;
         //        storing.displayArr();
         
     }//GEN-LAST:event_captureBtnActionPerformed
@@ -424,13 +428,19 @@ public class MainUI extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         ImgView iv=new ImgView();
+//        iv.setExtendedState(iv.MAXIMIZED_HORIZ);
         iv.setVisible(true);
+//        iv.setResizable(false);
+        
+//        iv.revalidate();
+//        iv.repaint();
+        
         iv.setLocationRelativeTo(null);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     
-    public void takingShot(String shotName){
+    public void takingShot(String shotNameString){
         try{
             
             Robot robot = new Robot();
@@ -442,6 +452,7 @@ public class MainUI extends javax.swing.JFrame {
             boolean status = ImageIO.write(bufferedImage, "png", file);
 //            System.out.println("Captured?"+status);
             erroLbl.setText("Captured");
+            shotName=shotName+1;
         }catch(Exception e){
             System.out.println(e);
         }
@@ -456,10 +467,12 @@ public class MainUI extends javax.swing.JFrame {
                 String comments=commentsJtxtArea.getText();
                 storing.setArr(shotName+".png", comments, Integer.parseInt(shotName));
                 takingShot(shotName);
+                
             }
         }else{
             storing.setArr(shotName+".png", "", Integer.parseInt(shotName));
             takingShot(shotName);
+            
         }
     }
     

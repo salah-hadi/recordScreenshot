@@ -61,8 +61,12 @@ public class StoringCommShots {
             }
             
         }
-        System.out.println("no of images are:"+noOfimgs);
+//        System.out.println("no of images are:"+noOfimgs);
         return noOfimgs;
+    }
+    
+    public int getLastIndex(){
+        return imgsNum()-1;
     }
     
     

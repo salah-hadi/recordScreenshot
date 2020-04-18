@@ -13,7 +13,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import recordscreenshot.StoringCommShots;
-
+import frames.MainUI;
 /**
  *
  * @author Salah
@@ -32,7 +32,12 @@ public class ImgView extends javax.swing.JFrame {
             Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
             
         }else{
+//            System.out.println("label size:"+imgPreviewLbl.getSize());
+//            imgPreviewLbl.setSize(1365, 598);
+//            1365 x 598
+
             settingIco(StoringCommShots.arr[0][0]);
+            comments.setText(StoringCommShots.arr[1][0]);
 //            imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][0]));
 //            imgPreviewLbl.setHorizontalAlignment(imgPreviewLbl.CENTER);
 //            System.out.println(imgPreviewLbl.getSize());
@@ -43,7 +48,9 @@ public class ImgView extends javax.swing.JFrame {
             nxtbtn.setEnabled(false);        
         }
         bkBtn.setEnabled(false);
-        
+        StoringCommShots cs=new StoringCommShots();
+        System.out.println("------");
+        cs.displayArr();
     }
 
     /**
@@ -64,11 +71,18 @@ public class ImgView extends javax.swing.JFrame {
         delBtn = new javax.swing.JButton();
         noOpages = new javax.swing.JLabel();
         currPage = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        comments = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1265, 603));
+        setResizable(false);
 
         jButton1.setText("Save as");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -102,44 +116,79 @@ public class ImgView extends javax.swing.JFrame {
 
         currPage.setText("jLabel1");
 
+        jLabel1.setText("of");
+
+        comments.setColumns(20);
+        comments.setRows(5);
+        jScrollPane2.setViewportView(comments);
+
+        jLabel2.setText("Comments");
+
+        jButton2.setText("update comments");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imgPreviewLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(129, 129, 129)
+                .addComponent(imgPreviewLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
+                        .addGap(207, 207, 207)
                         .addComponent(bkBtn)
                         .addGap(36, 36, 36)
-                        .addComponent(nxtbtn))
+                        .addComponent(nxtbtn)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(178, 178, 178)
+                                .addComponent(currPage)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(noOpages))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 412, Short.MAX_VALUE)
+                                .addComponent(jLabel2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(129, 129, 129)
                         .addComponent(jButton1)
                         .addGap(137, 137, 137)
-                        .addComponent(delBtn)))
-                .addGap(103, 103, 103)
-                .addComponent(currPage)
-                .addGap(32, 32, 32)
-                .addComponent(noOpages)
-                .addContainerGap(307, Short.MAX_VALUE))
+                        .addComponent(delBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(75, 75, 75)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(237, 237, 237))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(imgPreviewLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bkBtn)
-                    .addComponent(nxtbtn)
-                    .addComponent(noOpages)
-                    .addComponent(currPage))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(delBtn))
-                .addContainerGap())
+                .addComponent(imgPreviewLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bkBtn)
+                            .addComponent(nxtbtn)
+                            .addComponent(noOpages)
+                            .addComponent(currPage)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(delBtn)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(21, 21, 21)
+                                .addComponent(jButton2))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(50, 50, 50))
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -156,11 +205,11 @@ public class ImgView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
         );
 
         pack();
@@ -184,6 +233,7 @@ public class ImgView extends javax.swing.JFrame {
 
     private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
         // TODO add your handling code here:
+        StoringCommShots cs=new StoringCommShots();
         File img=new File(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
         if(noOpages.getText().equals("1")){
             WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
@@ -191,22 +241,28 @@ public class ImgView extends javax.swing.JFrame {
             img.delete();
             StoringCommShots.arr[0][0]=null;
             StoringCommShots.arr[1][0]=null;
+            
         }else{
             img.delete();
             //shifting array after delete
-            //has bug
-            for(int i=Integer.parseInt(currPage.getText())-1;i<4;i++){
-                StoringCommShots.arr[0][i]=StoringCommShots.arr[0][i+1];
-                StoringCommShots.arr[1][i]=StoringCommShots.arr[1][i+1];
-                if(i==3){
-                    StoringCommShots.arr[0][4]=null;
-                    StoringCommShots.arr[1][4]=null;
+
+            int currPageindex=Integer.parseInt(currPage.getText())-1;
+            int lastIndex=cs.getLastIndex();
+            
+            if(currPageindex==lastIndex){
+                StoringCommShots.arr[0][lastIndex]=null;
+                StoringCommShots.arr[1][lastIndex]=null;
+            }else{
+                for(int i=Integer.parseInt(currPage.getText())-1;i<4;i++){
+                    StoringCommShots.arr[0][i]=StoringCommShots.arr[0][i+1];
+                    StoringCommShots.arr[1][i]=StoringCommShots.arr[1][i+1];
+                    if(i==3){
+                        StoringCommShots.arr[0][4]=null;
+                        StoringCommShots.arr[1][4]=null;
+                    }
                 }
             }
-//            if(noOpages.getText().equals(4)){
-//                StoringCommShots.arr[0][4]=null;
-//                StoringCommShots.arr[1][4]=null;
-//            }
+            
             //open the previous image
     //        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-2]);
             if(bkBtn.isEnabled()){
@@ -214,17 +270,17 @@ public class ImgView extends javax.swing.JFrame {
             }else if(!bkBtn.isEnabled()&&nxtbtn.isEnabled()){
                 next();
             }
-//            else if(noOpages.getText().equals("1")){
-//                nxtbtn.setEnabled(false);
-//            }
 
             //modify total no of pages
             noOpages.setText(Integer.toString(Integer.parseInt(noOpages.getText())-1));
+            
             if(noOpages.getText().equals("1")){
                 bkBtn.setEnabled(false);
                 nxtbtn.setEnabled(false);
             }
         }
+        MainUI.shotName=MainUI.shotName-1;
+
         
     }//GEN-LAST:event_delBtnActionPerformed
 /**
@@ -234,7 +290,7 @@ public class ImgView extends javax.swing.JFrame {
     
     public int getNoShots(){
         StoringCommShots cs=new StoringCommShots();
-        cs.displayArr();
+
         int pages=cs.imgsNum();
         noOpages.setText(Integer.toString(pages));
         pagesNO=pages;
@@ -246,28 +302,36 @@ public class ImgView extends javax.swing.JFrame {
     }
     
     public void bk(){
-        if(nxtbtn.isEnabled()==false&&!noOpages.getText().equals("1")){
+        StoringCommShots cs=new StoringCommShots();
+        currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())-1));
+        if(nxtbtn.isEnabled()==false&&!currPage.getText().equals(Integer.toString(cs.imgsNum()))){
             nxtbtn.setEnabled(true);
         
         }
-        currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())-1));
+        
 //        imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]));
         settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
         if(currPage.getText().equals("1")){
             bkBtn.setEnabled(false);
         }
+         comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
     }
     
     public void next(){
+        System.out.println("label size:"+imgPreviewLbl.getSize());
+        StoringCommShots cs=new StoringCommShots();
          if(bkBtn.isEnabled()==false && !noOpages.getText().equals("1")){
             bkBtn.setEnabled(true);
         }
 //        imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())]));
-        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())]);
-        currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())+1));
-        if(noOpages.getText().equals(currPage.getText())){
+        if(!currPage.getText().equals(Integer.toString(cs.imgsNum()))){
+            currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())+1));  
+        }        
+        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+        if(noOpages.getText().equals(currPage.getText())||currPage.getText().equals(Integer.toString(cs.imgsNum()))){
             nxtbtn.setEnabled(false);        
         }
+        comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
     }
     /**
      * 
@@ -307,15 +371,20 @@ public class ImgView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bkBtn;
+    private javax.swing.JTextArea comments;
     private javax.swing.JLabel currPage;
     private javax.swing.JButton delBtn;
     private javax.swing.JLabel imgPreviewLbl;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel noOpages;
     private javax.swing.JButton nxtbtn;
     // End of variables declaration//GEN-END:variables
