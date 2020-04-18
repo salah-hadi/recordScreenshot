@@ -5,17 +5,45 @@
  */
 package imageViewer;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import recordscreenshot.StoringCommShots;
+
 /**
  *
  * @author Salah
  */
 public class ImgView extends javax.swing.JFrame {
 
+    int pagesNO;
     /**
      * Creates new form ImgView
      */
     public ImgView() {
         initComponents();
+        if(getNoShots()==0){
+            JOptionPane.showConfirmDialog(null, "There're no added images to preview");
+            WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+            Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
+            
+        }else{
+            settingIco(StoringCommShots.arr[0][0]);
+//            imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][0]));
+//            imgPreviewLbl.setHorizontalAlignment(imgPreviewLbl.CENTER);
+//            System.out.println(imgPreviewLbl.getSize());
+            currPage.setText("1");
+        }
+        
+        if(noOpages.getText().equals(currPage.getText())){
+            nxtbtn.setEnabled(false);        
+        }
+        bkBtn.setEnabled(false);
+        
     }
 
     /**
@@ -29,18 +57,18 @@ public class ImgView extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        imgPreviewLbl = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        nxtbtn = new javax.swing.JButton();
+        bkBtn = new javax.swing.JButton();
+        delBtn = new javax.swing.JButton();
+        noOpages = new javax.swing.JLabel();
+        currPage = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton1.setText("Save as");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -49,56 +77,68 @@ public class ImgView extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText(">");
+        nxtbtn.setText(">");
+        nxtbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nxtbtnActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("<");
+        bkBtn.setText("<");
+        bkBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bkBtnActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText(">>");
+        delBtn.setText("Delete");
+        delBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delBtnActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("<<");
+        noOpages.setText("jLabel2");
 
-        jButton6.setText("Delete");
+        currPage.setText("jLabel1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(imgPreviewLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(129, 129, 129)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton5)
-                        .addGap(28, 28, 28)
-                        .addComponent(jButton3)
+                        .addGap(77, 77, 77)
+                        .addComponent(bkBtn)
                         .addGap(36, 36, 36)
-                        .addComponent(jButton2)
-                        .addGap(27, 27, 27)
-                        .addComponent(jButton4))
+                        .addComponent(nxtbtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton6)))
-                .addContainerGap(265, Short.MAX_VALUE))
+                        .addGap(137, 137, 137)
+                        .addComponent(delBtn)))
+                .addGap(103, 103, 103)
+                .addComponent(currPage)
+                .addGap(32, 32, 32)
+                .addComponent(noOpages)
+                .addContainerGap(307, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton5)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)
-                            .addComponent(jButton4))
-                        .addGap(29, 29, 29)))
+                .addComponent(imgPreviewLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bkBtn)
+                    .addComponent(nxtbtn)
+                    .addComponent(noOpages)
+                    .addComponent(currPage))
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton6))
+                    .addComponent(delBtn))
                 .addContainerGap())
         );
 
@@ -130,11 +170,107 @@ public class ImgView extends javax.swing.JFrame {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void nxtbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nxtbtnActionPerformed
+        // TODO add your handling code here:
+        next();
+    }//GEN-LAST:event_nxtbtnActionPerformed
+
+    private void bkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkBtnActionPerformed
+        // TODO add your handling code here:
+        bk();
+        
+    }//GEN-LAST:event_bkBtnActionPerformed
+
+    private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
+        // TODO add your handling code here:
+        File img=new File(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+        if(noOpages.getText().equals("1")){
+            WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+            Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
+            img.delete();
+            StoringCommShots.arr[0][0]=null;
+            StoringCommShots.arr[1][0]=null;
+        }else{
+            img.delete();
+            //shifting array after delete
+            //has bug
+            for(int i=Integer.parseInt(currPage.getText())-1;i<4;i++){
+                StoringCommShots.arr[0][i]=StoringCommShots.arr[0][i+1];
+                StoringCommShots.arr[1][i]=StoringCommShots.arr[1][i+1];
+                if(i==3){
+                    StoringCommShots.arr[0][4]=null;
+                    StoringCommShots.arr[1][4]=null;
+                }
+            }
+//            if(noOpages.getText().equals(4)){
+//                StoringCommShots.arr[0][4]=null;
+//                StoringCommShots.arr[1][4]=null;
+//            }
+            //open the previous image
+    //        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-2]);
+            if(bkBtn.isEnabled()){
+                bk();
+            }else if(!bkBtn.isEnabled()&&nxtbtn.isEnabled()){
+                next();
+            }
+//            else if(noOpages.getText().equals("1")){
+//                nxtbtn.setEnabled(false);
+//            }
+
+            //modify total no of pages
+            noOpages.setText(Integer.toString(Integer.parseInt(noOpages.getText())-1));
+            if(noOpages.getText().equals("1")){
+                bkBtn.setEnabled(false);
+                nxtbtn.setEnabled(false);
+            }
+        }
+        
+    }//GEN-LAST:event_delBtnActionPerformed
 /**
  * jLabel1.setIcon(new ImageIcon("C:\\Users\\Salah\\Downloads\\51IEqZXGe0L._AC_.jpg"));
         jLabel1.setHorizontalAlignment(jLabel1.CENTER);
  */
+    
+    public int getNoShots(){
+        StoringCommShots cs=new StoringCommShots();
+        cs.displayArr();
+        int pages=cs.imgsNum();
+        noOpages.setText(Integer.toString(pages));
+        pagesNO=pages;
+        return pages;
+    }
+    
+    public void settingIco(String resource){
+        imgPreviewLbl.setIcon(new ImageIcon(new ImageIcon(resource).getImage().getScaledInstance(imgPreviewLbl.getWidth(), imgPreviewLbl.getHeight(), Image.SCALE_SMOOTH)));
+    }
+    
+    public void bk(){
+        if(nxtbtn.isEnabled()==false&&!noOpages.getText().equals("1")){
+            nxtbtn.setEnabled(true);
+        
+        }
+        currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())-1));
+//        imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]));
+        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+        if(currPage.getText().equals("1")){
+            bkBtn.setEnabled(false);
+        }
+    }
+    
+    public void next(){
+         if(bkBtn.isEnabled()==false && !noOpages.getText().equals("1")){
+            bkBtn.setEnabled(true);
+        }
+//        imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())]));
+        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())]);
+        currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())+1));
+        if(noOpages.getText().equals(currPage.getText())){
+            nxtbtn.setEnabled(false);        
+        }
+    }
     /**
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -170,17 +306,17 @@ public class ImgView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bkBtn;
+    private javax.swing.JLabel currPage;
+    private javax.swing.JButton delBtn;
+    private javax.swing.JLabel imgPreviewLbl;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel noOpages;
+    private javax.swing.JButton nxtbtn;
     // End of variables declaration//GEN-END:variables
 }

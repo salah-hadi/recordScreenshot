@@ -10,14 +10,14 @@ package recordscreenshot;
  * @author Salah
  */
 public class StoringCommShots {
-    public static String[][] arr=new String[2][100];
+    public static String[][] arr=new String[2][5];
     public void setArr(String shot, String comment, int i){
         arr[0][i]=shot;
         arr[1][i]=comment;
     }
     public void displayArr(){
         for(int i=0;i<2;i++){
-            for(int j=0;j<100;j++){
+            for(int j=0;j<5;j++){
                 System.out.println(arr[i][j]);
             }
         }
@@ -50,14 +50,18 @@ public class StoringCommShots {
         return nn;
     }
     
-    public int imgsNum(String value){
+    public int imgsNum(){
         int noOfimgs=0;
-        for(int i=0;i<100;i++){
+        for(int i=0;i<5;i++){
             if(isNull(arr[0][i])){
                 noOfimgs=i;
                 break;
+            }else if(i==4){
+                noOfimgs=i+1;
             }
+            
         }
+        System.out.println("no of images are:"+noOfimgs);
         return noOfimgs;
     }
     
