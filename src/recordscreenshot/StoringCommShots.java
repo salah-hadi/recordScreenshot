@@ -50,5 +50,16 @@ public class StoringCommShots {
         return nn;
     }
     
+    public int imgsNum(String value){
+        int noOfimgs=0;
+        for(int i=0;i<100;i++){
+            if(isNull(arr[0][i])){
+                noOfimgs=i;
+                break;
+            }
+        }
+        return noOfimgs;
+    }
+    
     
 }

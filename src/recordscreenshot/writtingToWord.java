@@ -23,12 +23,12 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
  */
 public class writtingToWord extends MainUI{
     
-    public writtingToWord(){
+    public writtingToWord(String fileName,int w,int h){
         try{
             storing.arrayValidator();
             XWPFDocument document = new XWPFDocument(); 		
             //Write the Document in file system
-            FileOutputStream out = new FileOutputStream( new File("createdocumentv3.docx"));
+            FileOutputStream out = new FileOutputStream( new File(fileName+".docx"));
             XWPFParagraph pa=document.createParagraph();
             XWPFRun run=pa.createRun();
             run.setText("Start document");
@@ -50,7 +50,7 @@ public class writtingToWord extends MainUI{
                             imgFile=new File(arrayVal0);
                             imgFileName=imgFile.getName();
                             sl=new FileInputStream(imgFile);
-                            run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(500), Units.toEMU(500));
+                            run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(w), Units.toEMU(h));
                              run.addCarriageReturn();
 
                         }else if(!arrayVal1.isEmpty()&&!arrayVal0.isEmpty()){
@@ -60,7 +60,7 @@ public class writtingToWord extends MainUI{
                             imgFile=new File(arrayVal0);
                             imgFileName=imgFile.getName();
                             sl=new FileInputStream(imgFile);
-                            run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(500), Units.toEMU(500));
+                            run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(w), Units.toEMU(h));
                              run.addCarriageReturn();
                         }
 //                        sl.close();
