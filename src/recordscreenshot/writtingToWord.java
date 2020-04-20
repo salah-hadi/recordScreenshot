@@ -11,7 +11,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -26,9 +29,22 @@ public class writtingToWord extends MainUI{
     public writtingToWord(String fileName,int w,int h){
         try{
             storing.arrayValidator();
-            XWPFDocument document = new XWPFDocument(); 		
+            XWPFDocument document=null;
+            File f=new File(fileName+".docx");
+//            File f2=null;
+            boolean existing=f.exists();
+            if(existing==true){
+//                f2=new File(fileName+"1.docx");
+//                f.renameTo(f2);
+                document = new XWPFDocument(OPCPackage.open(fileName+".docx"));
+            }else{
+                document = new XWPFDocument(); 
+            }
+           
+//            XWPFDocument document = new XWPFDocument(); 		
             //Write the Document in file system
-            FileOutputStream out = new FileOutputStream( new File(fileName+".docx"));
+            FileOutputStream out = new FileOutputStream( new File(fileName+"1.docx"));
+//            FileInputStream in = new FileInputStream(fileName+".docx");
             XWPFParagraph pa=document.createParagraph();
             XWPFRun run=pa.createRun();
             run.setText("Start document");
@@ -91,6 +107,21 @@ public class writtingToWord extends MainUI{
             out.close();
             sl.close();
             document.close();
+            File f3=new File(fileName+"1.docx");
+           if(f3.exists()){
+               File f5=new File(fileName+".docx");
+               if(f5.exists()){
+                   f5.delete();
+               }
+               
+               File f4=new File(fileName+".docx");
+               if(f3.renameTo(f4)){
+                   System.out.println("Renamed");
+               }else{
+                   System.out.println("error:"+f3.renameTo(f4));
+               }
+               
+           }
             storing.afterArrValidator();
 //            System.out.println("createdocument.docx written successully");
         }catch(FileNotFoundException e){
@@ -103,5 +134,15 @@ public class writtingToWord extends MainUI{
         
     }
 //    public void addImg(){}
+    
+    public void existingFile(String fileName) throws IOException{
+        try {
+            XWPFDocument doc = new XWPFDocument(OPCPackage.open(fileName));
+            
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(writtingToWord.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
     
 }

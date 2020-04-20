@@ -7,7 +7,6 @@ package imageViewer;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.ImageIcon;
@@ -23,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 /**
  *
  * @author Salah
@@ -31,16 +29,17 @@ import javax.swing.JFrame;
 public class ImgView extends javax.swing.JFrame {
 
     int pagesNO;
+    public static ImgView iv=null;
     /**
      * Creates new form ImgView
      */
     public ImgView() {
       //still working on this, making preview open just one window
         
-        if(MainUI.activeImgView==true){
-            setExtendedState( this.NORMAL );
-            this.toFront();
-        }else{
+//        if(MainUI.activeImgView==true){
+//            setExtendedState( this.NORMAL );
+//            this.toFront();
+//        }else{
             initComponents();
             if(getNoShots()==0){
                 JOptionPane.showMessageDialog(null, "There're no added images to preview");
@@ -67,12 +66,18 @@ public class ImgView extends javax.swing.JFrame {
         //        StoringCommShots cs=new StoringCommShots();
         //        System.out.println("------");
         //        cs.displayArr();
-                MainUI.activeImgView=true;
-            }
+//                MainUI.activeImgView=true;
+//            }
         
         
     }
 
+     public static ImgView getObj(){
+        if(iv==null){
+            iv=new ImgView();
+        }
+        return iv;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -286,6 +291,7 @@ public class ImgView extends javax.swing.JFrame {
             img.delete();
             StoringCommShots.arr[0][0]=null;
             StoringCommShots.arr[1][0]=null;
+            ImgView.iv=null;
             
         }else{
             img.delete();
@@ -338,7 +344,9 @@ public class ImgView extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        MainUI.activeImgView=false;
+        ImgView.iv=null;
+//        MainUI.activeImgView=false;
+
     }//GEN-LAST:event_formWindowClosing
 /**
  * jLabel1.setIcon(new ImageIcon("C:\\Users\\Salah\\Downloads\\51IEqZXGe0L._AC_.jpg"));

@@ -51,7 +51,8 @@ public class MainUI extends javax.swing.JFrame {
     public static int shotName=0;
     public StoringCommShots storing;
     public static boolean isFileSaved=true;
-    public static boolean activeImgView=false;
+//    public static boolean activeImgView=false;
+//    public static ImgView iv=null;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -254,7 +255,7 @@ public class MainUI extends javax.swing.JFrame {
                     .addComponent(delete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -556,6 +557,8 @@ public class MainUI extends javax.swing.JFrame {
             erroLbl.setText("New session started.");
             storing.resetArr();
             shotName=0;
+            isFileSaved=true;
+            ImgView.iv=null;
     }
    
     
@@ -589,16 +592,23 @@ public class MainUI extends javax.swing.JFrame {
     }
     
     public void preview(){
-          ImgView iv=new ImgView();
-//        iv.setExtendedState(iv.MAXIMIZED_HORIZ);
-        iv.setVisible(true);
-//        iv.setResizable(false);
         
-//        iv.revalidate();
-//        iv.repaint();
+//          ImgView iv=new ImgView();
+////        iv.setExtendedState(iv.MAXIMIZED_HORIZ);
+//        iv.setVisible(true);
+////        iv.setResizable(false);
+//        
+////        iv.revalidate();
+////        iv.repaint();
+//        
+//        iv.setLocationRelativeTo(null);
+
+//has bug after creating new session, It won;t work on run, but it works smooth on debug
+          ImgView.getObj().setVisible(true); //single tone
         
-        iv.setLocationRelativeTo(null);
     }
+    
+   
     /**
      * @param args the command line arguments
      */
