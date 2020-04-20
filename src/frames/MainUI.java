@@ -88,6 +88,7 @@ public class MainUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Screenshots recorder");
+        setAlwaysOnTop(true);
         setPreferredSize(new java.awt.Dimension(733, 211));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -359,7 +360,8 @@ public class MainUI extends javax.swing.JFrame {
         // TODO add your handling code here:     
         this.setState(1);//minimize the window
         validateComment(Integer.toString(shotName)); //validating comments and take screenshot
-        this.setState(0); //restore the window
+        //restore the window
+        this.setState(0); 
     }//GEN-LAST:event_captureBtnActionPerformed
 
     private void commentsJtxtAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_commentsJtxtAreaKeyPressed

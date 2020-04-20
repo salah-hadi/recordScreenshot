@@ -27,9 +27,7 @@ public class RecordScreenshot extends MainUI{
             try {
                 //installing Jtatto theme
                 UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
-                MainUI mu=new MainUI();
-                mu.setVisible(true);
-                mu.setLocationRelativeTo(null);
+                
 
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
@@ -42,6 +40,9 @@ public class RecordScreenshot extends MainUI{
             }
            
         }
+        MainUI mu=new MainUI();
+        mu.setVisible(true);
+        mu.setLocationRelativeTo(null);
         
 
         
