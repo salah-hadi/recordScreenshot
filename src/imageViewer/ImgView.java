@@ -14,6 +14,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import recordscreenshot.StoringCommShots;
 import frames.MainUI;
+import java.awt.FileDialog;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 /**
  *
  * @author Salah
@@ -25,32 +35,42 @@ public class ImgView extends javax.swing.JFrame {
      * Creates new form ImgView
      */
     public ImgView() {
-        initComponents();
-        if(getNoShots()==0){
-            JOptionPane.showConfirmDialog(null, "There're no added images to preview");
-            WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
-            Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
-            
-        }else{
-//            System.out.println("label size:"+imgPreviewLbl.getSize());
-//            imgPreviewLbl.setSize(1365, 598);
-//            1365 x 598
-
-            settingIco(StoringCommShots.arr[0][0]);
-            comments.setText(StoringCommShots.arr[1][0]);
-//            imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][0]));
-//            imgPreviewLbl.setHorizontalAlignment(imgPreviewLbl.CENTER);
-//            System.out.println(imgPreviewLbl.getSize());
-            currPage.setText("1");
-        }
+      //still working on this, making preview open just one window
         
-        if(noOpages.getText().equals(currPage.getText())){
-            nxtbtn.setEnabled(false);        
-        }
-        bkBtn.setEnabled(false);
-        StoringCommShots cs=new StoringCommShots();
-        System.out.println("------");
-        cs.displayArr();
+        if(MainUI.activeImgView==true){
+            setExtendedState( this.NORMAL );
+            this.toFront();
+        }else{
+            initComponents();
+            if(getNoShots()==0){
+                JOptionPane.showMessageDialog(null, "There're no added images to preview");
+                WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+                Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
+
+            }else{
+        //            System.out.println("label size:"+imgPreviewLbl.getSize());
+        //            imgPreviewLbl.setSize(1365, 598);
+        //            1365 x 598
+
+                    settingIco(StoringCommShots.arr[0][0]);
+                    comments.setText(StoringCommShots.arr[1][0]);
+        //            imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][0]));
+        //            imgPreviewLbl.setHorizontalAlignment(imgPreviewLbl.CENTER);
+        //            System.out.println(imgPreviewLbl.getSize());
+                    currPage.setText("1");
+                }
+
+                if(noOpages.getText().equals(currPage.getText())){
+                    nxtbtn.setEnabled(false);        
+                }
+                bkBtn.setEnabled(false);
+        //        StoringCommShots cs=new StoringCommShots();
+        //        System.out.println("------");
+        //        cs.displayArr();
+                MainUI.activeImgView=true;
+            }
+        
+        
     }
 
     /**
@@ -65,7 +85,7 @@ public class ImgView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         imgPreviewLbl = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        saveAsbtn = new javax.swing.JButton();
         nxtbtn = new javax.swing.JButton();
         bkBtn = new javax.swing.JButton();
         delBtn = new javax.swing.JButton();
@@ -81,13 +101,19 @@ public class ImgView extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Preview Screenshots");
         setPreferredSize(new java.awt.Dimension(1265, 603));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jButton1.setText("Save as");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveAsbtn.setText("Save as");
+        saveAsbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                saveAsbtnActionPerformed(evt);
             }
         });
 
@@ -125,6 +151,11 @@ public class ImgView extends javax.swing.JFrame {
         jLabel2.setText("Comments");
 
         jButton2.setText("update comments");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -154,7 +185,7 @@ public class ImgView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(129, 129, 129)
-                        .addComponent(jButton1)
+                        .addComponent(saveAsbtn)
                         .addGap(137, 137, 137)
                         .addComponent(delBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -178,7 +209,7 @@ public class ImgView extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
+                            .addComponent(saveAsbtn)
                             .addComponent(delBtn)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -215,10 +246,24 @@ public class ImgView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void saveAsbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsbtnActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+        FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
+        fDialog.setFile("Screenshot");
+        fDialog.setVisible(true);
+        
+        String fileName=fDialog.getFile();
+        if(fileName.contains(".")){
+            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
+        }else{
+            String dir = fDialog.getDirectory();
+            String path=dir+fileName;
+//            System.out.println("Path is:"+path);
+            copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path+".png");
+        }
+        
+    }//GEN-LAST:event_saveAsbtnActionPerformed
 
     private void nxtbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nxtbtnActionPerformed
         // TODO add your handling code here:
@@ -280,9 +325,21 @@ public class ImgView extends javax.swing.JFrame {
             }
         }
         MainUI.shotName=MainUI.shotName-1;
+        MainUI.isFileSaved=false;
 
         
     }//GEN-LAST:event_delBtnActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]=comments.getText();
+        MainUI.isFileSaved=false;
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        MainUI.activeImgView=false;
+    }//GEN-LAST:event_formWindowClosing
 /**
  * jLabel1.setIcon(new ImageIcon("C:\\Users\\Salah\\Downloads\\51IEqZXGe0L._AC_.jpg"));
         jLabel1.setHorizontalAlignment(jLabel1.CENTER);
@@ -333,6 +390,26 @@ public class ImgView extends javax.swing.JFrame {
         }
         comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
     }
+    
+    public void copyPasteImg(String imgin, String imgOut){
+        try {
+            FileInputStream in = new FileInputStream(imgin);
+            FileOutputStream ou = new FileOutputStream(imgOut);
+            BufferedInputStream bin = new BufferedInputStream(in);
+            BufferedOutputStream bou = new BufferedOutputStream(ou);
+            int b=0;
+            while(b!=-1){
+                b=bin.read();
+                bou.write(b);
+            }
+            bin.close();
+            bou.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * 
      * @param args the command line arguments
@@ -375,7 +452,6 @@ public class ImgView extends javax.swing.JFrame {
     private javax.swing.JLabel currPage;
     private javax.swing.JButton delBtn;
     private javax.swing.JLabel imgPreviewLbl;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -387,5 +463,6 @@ public class ImgView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel noOpages;
     private javax.swing.JButton nxtbtn;
+    private javax.swing.JButton saveAsbtn;
     // End of variables declaration//GEN-END:variables
 }

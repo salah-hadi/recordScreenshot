@@ -40,7 +40,7 @@ public class writtingToWord extends MainUI{
             String arrayVal0;
             String arrayVal1;
 //            for(int i=0;i<2;i++){
-                for(int j=0;j<100;j++){
+                for(int j=0;j<5;j++){
 //                    storing.displayArr();
                     storing.arrayValidator();
                     arrayVal0=StoringCommShots.arr[0][j];
@@ -91,6 +91,7 @@ public class writtingToWord extends MainUI{
             out.close();
             sl.close();
             document.close();
+            storing.afterArrValidator();
 //            System.out.println("createdocument.docx written successully");
         }catch(FileNotFoundException e){
             System.out.println(e);

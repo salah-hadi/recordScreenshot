@@ -25,7 +25,7 @@ public class StoringCommShots {
     
     public void arrayValidator(){
         for(int i=0;i<2;i++ ){
-            for(int j=0;j<100;j++){
+            for(int j=0;j<5;j++){
                 if(isNull(arr[i][j])){
                     arr[i][j]="";
                 }
@@ -33,6 +33,19 @@ public class StoringCommShots {
                 
             }
         }
+    }
+    
+    public void afterArrValidator(){
+        
+            for(int j=0;j<5;j++){
+                if(arr[0][j].isEmpty()){
+                    arr[0][j]=null;
+                    arr[1][j]=null;
+                }
+                
+                
+            }
+        
     }
     public boolean isNull(String validate){
         boolean nn=false;
@@ -69,5 +82,13 @@ public class StoringCommShots {
         return imgsNum()-1;
     }
     
+    public void resetArr(){
+        for(int i=0;i<2;i++){
+            for(int j=0;j<5;j++)
+            {
+                arr[i][j]=null;
+            }
+        }
+    }
     
 }

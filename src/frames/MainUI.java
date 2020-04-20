@@ -14,7 +14,9 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import recordscreenshot.StoringCommShots;
 import recordscreenshot.writtingToWord;
 
@@ -33,6 +35,13 @@ public class MainUI extends javax.swing.JFrame {
         wBox.setVisible(false);
         hBox.setVisible(false);
         fileBox.setVisible(false);
+        delete.setVisible(false);
+//        save.setVisible(false);
+//        previewBtn.setVisible(false);
+        commentsJtxtArea.setVisible(false);
+        commentsScPane.setVisible(false);
+            
+        this.setSize(176, 211);
     }
 //    public MainUI(boolean storingObj){
 //        initComponents();
@@ -41,6 +50,8 @@ public class MainUI extends javax.swing.JFrame {
 //    }
     public static int shotName=0;
     public StoringCommShots storing;
+    public static boolean isFileSaved=true;
+    public static boolean activeImgView=false;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,14 +78,25 @@ public class MainUI extends javax.swing.JFrame {
         captureBtn = new javax.swing.JButton();
         save = new javax.swing.JButton();
         delete = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        previewBtn = new javax.swing.JButton();
         erroLbl = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        previewMenu = new javax.swing.JMenuItem();
+        newSessionMenu = new javax.swing.JMenuItem();
+        saveMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Screenshots recorder");
         setPreferredSize(new java.awt.Dimension(733, 211));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
+        hTxt.setText("500");
         hTxt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 hTxtKeyPressed(evt);
@@ -88,6 +110,7 @@ public class MainUI extends javax.swing.JFrame {
 
         jLabel2.setText("W:");
 
+        wTxt.setText("500");
         wTxt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 wTxtKeyPressed(evt);
@@ -197,17 +220,17 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        delete.setText("Delete");
+        delete.setText("New session");
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);
             }
         });
 
-        jButton2.setText("preview");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        previewBtn.setText("preview");
+        previewBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                previewBtnActionPerformed(evt);
             }
         });
 
@@ -217,42 +240,77 @@ public class MainUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(captureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton1))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(83, 83, 83))
-                        .addComponent(delete))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jButton2)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(captureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(previewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(delete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(captureBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(save, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addGap(20, 20, 20))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(captureBtn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(previewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         erroLbl.setForeground(new java.awt.Color(255, 51, 51));
         erroLbl.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jMenu1.setText("File");
+
+        previewMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        previewMenu.setText("Preview");
+        previewMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previewMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(previewMenu);
+
+        newSessionMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        newSessionMenu.setText("New session");
+        newSessionMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newSessionMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(newSessionMenu);
+
+        saveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveMenu.setText("Save");
+        saveMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(saveMenu);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -281,31 +339,8 @@ public class MainUI extends javax.swing.JFrame {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here:
-        String fileName=fileNameTxt.getText();
-            String w=wTxt.getText();
-            String h=hTxt.getText();
-            if(fileName.isEmpty()){
-                erroLbl.setText("Kindly fill 'File Name' field");
-                return;
-            }else if(w.isEmpty()){
-                erroLbl.setText("Kindly Fill 'W' Field");
-                return;
-            }else if(h.isEmpty()){
-                erroLbl.setText("Kindly Fill 'H' field");
-                return;
-            }
-        if(hBox.isSelected()&&wBox.isSelected()&&fileBox.isSelected()){
-
-            writtingToWord wt=new writtingToWord(fileName,Integer.parseInt(w),Integer.parseInt(h));
-            erroLbl.setText("Word File is created successfully.");
-        }else if(!hBox.isSelected()){
-            erroLbl.setText("Kindly fill 'H' field with Integres");
-        }else if(!wBox.isSelected()){
-            erroLbl.setText("Kindly fill 'W' field with Integres");
-        }else if(!fileBox.isSelected()){
-            erroLbl.setText("'Field Name' field has invalid value");
-        }
-        
+       
+        save();
     }//GEN-LAST:event_saveActionPerformed
 
     private void captureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureBtnActionPerformed
@@ -339,6 +374,7 @@ public class MainUI extends javax.swing.JFrame {
             
             commentsJtxtArea.setVisible(false);
             commentsScPane.setVisible(false);
+            this.setSize(176, 211);
 //            System.out.println("Hidden");
 //            erroLbl.setVisible(false);
             //            commentsScPane.setSize(611, 53);
@@ -360,6 +396,7 @@ public class MainUI extends javax.swing.JFrame {
             commentsJtxtArea.setVisible(true);
             jPanel1.revalidate();
             jPanel1.repaint();
+            this.setSize(469, 211);
 //            System.out.println("Displayed");
 //            erroLbl.setVisible(true);
             //            System.out.println("jPanel1 size"+jPanel1.getSize()+"\nJframe size:"+muu.getSize()+"\nscroll size:"+commentsScPane.getSize());
@@ -367,16 +404,6 @@ public class MainUI extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        // TODO add your handling code here:
-        storing.arrayValidator();
-            for(int j=0;j<100;j++){
-                File shotFile=new File(StoringCommShots.arr[0][j]);
-                shotFile.delete();
-            }
-            erroLbl.setText("Sceenshots are deleted successfully.");
-    }//GEN-LAST:event_deleteActionPerformed
 
     private void fileNameTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fileNameTxtKeyPressed
         // TODO add your handling code here:
@@ -425,19 +452,49 @@ public class MainUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_fileNameTxtKeyReleased
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void previewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewBtnActionPerformed
         // TODO add your handling code here:
-        ImgView iv=new ImgView();
-//        iv.setExtendedState(iv.MAXIMIZED_HORIZ);
-        iv.setVisible(true);
-//        iv.setResizable(false);
-        
-//        iv.revalidate();
-//        iv.repaint();
-        
-        iv.setLocationRelativeTo(null);
+      preview();
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_previewBtnActionPerformed
+
+    private void previewMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewMenuActionPerformed
+        // TODO add your handling code here:
+        preview();
+    }//GEN-LAST:event_previewMenuActionPerformed
+
+    private void newSessionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSessionMenuActionPerformed
+        // TODO add your handling code here:
+        newSession();
+    }//GEN-LAST:event_newSessionMenuActionPerformed
+
+    private void saveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuActionPerformed
+        // TODO add your handling code here:
+        save();
+    }//GEN-LAST:event_saveMenuActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        // TODO add your handling code here:
+        newSession();
+
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(isFileSaved==true){
+            newSession();
+            System.exit(0);
+        }else{
+            int result=JOptionPane.showConfirmDialog(null, "There are unsaved screenshots, Are you sure to exit?","Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE );
+            if(result==JOptionPane.YES_OPTION){
+                newSession();
+                System.exit(0);
+            }else{
+                this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            }
+        }
+        
+    }//GEN-LAST:event_formWindowClosing
 
     
     public void takingShot(String shotNameString){
@@ -453,6 +510,7 @@ public class MainUI extends javax.swing.JFrame {
 //            System.out.println("Captured?"+status);
             erroLbl.setText("Captured");
             shotName=shotName+1;
+            isFileSaved=false;
         }catch(Exception e){
             System.out.println(e);
         }
@@ -487,6 +545,59 @@ public class MainUI extends javax.swing.JFrame {
             validInt=false;
         }
         return validInt;
+    }
+    
+    public void newSession(){
+         storing.arrayValidator();
+            for(int j=0;j<5;j++){
+                File shotFile=new File(StoringCommShots.arr[0][j]);
+                shotFile.delete();
+            }
+            erroLbl.setText("New session started.");
+            storing.resetArr();
+            shotName=0;
+    }
+   
+    
+    public void save(){
+         this.setSize(733, 211);
+        String fileName=fileNameTxt.getText();
+            String w=wTxt.getText();
+            String h=hTxt.getText();
+            if(fileName.isEmpty()){
+                erroLbl.setText("Kindly fill 'File Name' field");
+                return;
+            }else if(w.isEmpty()){
+                erroLbl.setText("Kindly Fill 'W' Field");
+                return;
+            }else if(h.isEmpty()){
+                erroLbl.setText("Kindly Fill 'H' field");
+                return;
+            }
+        if(hBox.isSelected()&&wBox.isSelected()&&fileBox.isSelected()){
+
+            writtingToWord wt=new writtingToWord(fileName,Integer.parseInt(w),Integer.parseInt(h));
+            erroLbl.setText("Word File is created successfully.");
+            isFileSaved=true;
+        }else if(!hBox.isSelected()){
+            erroLbl.setText("Kindly fill 'H' field with Integres");
+        }else if(!wBox.isSelected()){
+            erroLbl.setText("Kindly fill 'W' field with Integres");
+        }else if(!fileBox.isSelected()){
+            erroLbl.setText("'Field Name' field has invalid value");
+        }
+    }
+    
+    public void preview(){
+          ImgView iv=new ImgView();
+//        iv.setExtendedState(iv.MAXIMIZED_HORIZ);
+        iv.setVisible(true);
+//        iv.setResizable(false);
+        
+//        iv.revalidate();
+//        iv.repaint();
+        
+        iv.setLocationRelativeTo(null);
     }
     /**
      * @param args the command line arguments
@@ -538,13 +649,18 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JCheckBox hBox;
     private javax.swing.JTextField hTxt;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JMenuItem newSessionMenu;
+    private javax.swing.JButton previewBtn;
+    private javax.swing.JMenuItem previewMenu;
     private javax.swing.JButton save;
+    private javax.swing.JMenuItem saveMenu;
     private javax.swing.JCheckBox wBox;
     private javax.swing.JTextField wTxt;
     // End of variables declaration//GEN-END:variables
