@@ -26,38 +26,36 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
  */
 public class writtingToWord extends MainUI{
     
+    /**Will create or update word document
+     @param fileName Word file name
+     @param w Image width in word
+     @param h Image Hight in word
+     @exception FileNotFoundException
+     @exception IOException
+     @exception InvalidFormatException*/
     public writtingToWord(String fileName,int w,int h){
         try{
             storing.arrayValidator();
             XWPFDocument document=null;
             File f=new File(fileName+".docx");
-//            File f2=null;
             boolean existing=f.exists();
             if(existing==true){
-//                f2=new File(fileName+"1.docx");
-//                f.renameTo(f2);
                 document = new XWPFDocument(OPCPackage.open(fileName+".docx"));
             }else{
                 document = new XWPFDocument(); 
             }
-           
-//            XWPFDocument document = new XWPFDocument(); 		
-            //Write the Document in file system
+
             FileOutputStream out = new FileOutputStream( new File(fileName+"1.docx"));
-//            FileInputStream in = new FileInputStream(fileName+".docx");
             XWPFParagraph pa=document.createParagraph();
             XWPFRun run=pa.createRun();
             run.setText("Start document");
             run.addCarriageReturn();
-            //looping this section
             File imgFile;
             String imgFileName;
             FileInputStream sl=null;
             String arrayVal0;
             String arrayVal1;
-//            for(int i=0;i<2;i++){
-                for(int j=0;j<5;j++){
-//                    storing.displayArr();
+                for(int j=0;j<200;j++){
                     storing.arrayValidator();
                     arrayVal0=StoringCommShots.arr[0][j];
                     arrayVal1=StoringCommShots.arr[1][j];
@@ -79,31 +77,11 @@ public class writtingToWord extends MainUI{
                             run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFileName, Units.toEMU(w), Units.toEMU(h));
                              run.addCarriageReturn();
                         }
-//                        sl.close();
                     }
-                
-//            }
-//            File imgFile1=new File("0.png");
-//            String imgFile=imgFile1.getName();
-            
-//              BufferedImage bimg1 = ImageIO.read(imgFile1);
-//              int width = bimg1.getWidth();
-//              int height = bimg1.getHeight();
-            
-//            FileInputStream sl=new FileInputStream(imgFile1);
-            
-//            run.addCarriageReturn();
-//            run.setText("test 22");
-            
-//            run.addPicture(sl, XWPFDocument.PICTURE_TYPE_PNG, imgFile, Units.toEMU(500), Units.toEMU(500));
-//            sl.close();
-//            run.a
-///End of loop
-//            run.addCarriageReturn();
+               
             run.setText("END of Doc.");
 
             document.write(out);
-            
             out.close();
             sl.close();
             document.close();
@@ -114,16 +92,17 @@ public class writtingToWord extends MainUI{
                    f5.delete();
                }
                
+               //renaming file after finising
                File f4=new File(fileName+".docx");
                if(f3.renameTo(f4)){
-                   System.out.println("Renamed");
-               }else{
-                   System.out.println("error:"+f3.renameTo(f4));
+//                   System.out.println("Renamed");
                }
+//               else{
+//                   System.out.println("error:"+f3.renameTo(f4));
+//               }
                
            }
             storing.afterArrValidator();
-//            System.out.println("createdocument.docx written successully");
         }catch(FileNotFoundException e){
             System.out.println(e);
         }catch(IOException io){
@@ -133,16 +112,4 @@ public class writtingToWord extends MainUI{
         }
         
     }
-//    public void addImg(){}
-    
-    public void existingFile(String fileName) throws IOException{
-        try {
-            XWPFDocument doc = new XWPFDocument(OPCPackage.open(fileName));
-            
-        } catch (InvalidFormatException ex) {
-            Logger.getLogger(writtingToWord.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    
 }

@@ -6,13 +6,15 @@
 package frames;
 
 import imageViewer.ImgView;
+import java.awt.AWTException;
+import java.awt.FileDialog;
+import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -26,33 +28,28 @@ import recordscreenshot.writtingToWord;
  */
 public class MainUI extends javax.swing.JFrame {
 
+    public static int shotName=0;
+    public StoringCommShots storing;
+    public static boolean isFileSaved=true;
     /**
      * Creates new form MainUI
      */
     public MainUI() {
         initComponents();
         storing=new StoringCommShots();
-        wBox.setVisible(false);
-        hBox.setVisible(false);
-        fileBox.setVisible(false);
-        delete.setVisible(false);
-//        save.setVisible(false);
-//        previewBtn.setVisible(false);
-        commentsJtxtArea.setVisible(false);
+        //Jcheckboxes used to validate if fields has the correct data(When selected) or not.
+        wBox.setVisible(false); //width field
+        hBox.setVisible(false);  //Hight field
+        fileBox.setVisible(false);   //File name field
+        
+        delete.setVisible(false);   //Hidding New session button
+        
+        commentsJtxtArea.setVisible(false); //hidding comments field by default
         commentsScPane.setVisible(false);
             
         this.setSize(176, 211);
     }
-//    public MainUI(boolean storingObj){
-//        initComponents();
-//        storing=new StoringCommShots();
-//
-//    }
-    public static int shotName=0;
-    public StoringCommShots storing;
-    public static boolean isFileSaved=true;
-//    public static boolean activeImgView=false;
-//    public static ImgView iv=null;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,8 +69,10 @@ public class MainUI extends javax.swing.JFrame {
         wBox = new javax.swing.JCheckBox();
         hBox = new javax.swing.JCheckBox();
         fileBox = new javax.swing.JCheckBox();
+        browseFileName = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        commentBtn = new javax.swing.JButton();
         commentsScPane = new javax.swing.JScrollPane();
         commentsJtxtArea = new javax.swing.JTextArea();
         captureBtn = new javax.swing.JButton();
@@ -121,20 +120,25 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        fileNameTxt.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                fileNameTxtKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                fileNameTxtKeyReleased(evt);
-            }
-        });
+        fileNameTxt.setEditable(false);
 
         jLabel1.setText("File Name:");
 
+        wBox.setSelected(true);
         wBox.setEnabled(false);
 
+        hBox.setSelected(true);
         hBox.setEnabled(false);
+
+        browseFileName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder.png"))); // NOI18N
+        browseFileName.setText("Browse");
+        browseFileName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseFileNameActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText(".docx");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -144,56 +148,61 @@ public class MainUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(fileNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fileBox)))
-                        .addContainerGap(29, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(wTxt)
-                            .addComponent(hTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(wBox)
-                            .addComponent(hBox))
-                        .addGap(30, 30, 30))))
+                            .addComponent(hTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(browseFileName))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(fileNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(wBox)
+                    .addComponent(hBox)
+                    .addComponent(fileBox))
+                .addGap(1, 1, 1))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(browseFileName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(fileNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(wTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(wBox))
-                        .addGap(8, 8, 8)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(hBox)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel3)
-                                .addComponent(hTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(fileBox))
-                .addGap(0, 7, Short.MAX_VALUE))
+                        .addComponent(jLabel4))
+                    .addComponent(fileBox, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(wTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(wBox))
+                .addGap(8, 8, 8)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(hBox)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(hTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         jPanel1.setPreferredSize(new java.awt.Dimension(634, 160));
 
-        jButton1.setText("Comment");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        commentBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/form_blue_add.png"))); // NOI18N
+        commentBtn.setText("Comment");
+        commentBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                commentBtnActionPerformed(evt);
             }
         });
 
@@ -206,6 +215,7 @@ public class MainUI extends javax.swing.JFrame {
         });
         commentsScPane.setViewportView(commentsJtxtArea);
 
+        captureBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/1486395877-camera_80616.png"))); // NOI18N
         captureBtn.setText("Capture");
         captureBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,6 +238,7 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
+        previewBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder_movie.png"))); // NOI18N
         previewBtn.setText("preview");
         previewBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,19 +254,18 @@ public class MainUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(captureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
+                            .addComponent(save)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)))
+                                .addGap(2, 2, 2)
+                                .addComponent(captureBtn)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(previewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(commentBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(delete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,13 +273,13 @@ public class MainUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
+                            .addComponent(commentBtn)
                             .addComponent(captureBtn))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(previewBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(15, 15, 15)
                         .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(commentsScPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -320,18 +330,20 @@ public class MainUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addComponent(erroLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(21, 21, 21))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(erroLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -339,90 +351,57 @@ public class MainUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        // TODO add your handling code here:
-       
+        // TODO add your handling code here: 
         save();
     }//GEN-LAST:event_saveActionPerformed
 
     private void captureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureBtnActionPerformed
-        // TODO add your handling code here:
-        
-        /**on capture make it check till the first null then add in, or on removing, reduce shot name parameters*/
-        this.setState(1);
-
-        validateComment(Integer.toString(shotName));
-        this.setState(0);
-//        shotName=shotName+1;
-        //        storing.displayArr();
-        
+        // TODO add your handling code here:     
+        this.setState(1);//minimize the window
+        validateComment(Integer.toString(shotName)); //validating comments and take screenshot
+        this.setState(0); //restore the window
     }//GEN-LAST:event_captureBtnActionPerformed
 
     private void commentsJtxtAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_commentsJtxtAreaKeyPressed
         // TODO add your handling code here:
-        erroLbl.setText("");
+        //clear error label
+        erroLbl.setText(""); 
     }//GEN-LAST:event_commentsJtxtAreaKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void commentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commentBtnActionPerformed
         // TODO add your handling code here:
-        
+        /**This will hide or show "Comments" field and resize the Jframe*/
         MainUI muu=new MainUI();
         erroLbl.setText("");
-   
 
-        //                    System.out.println("jPanel1 size"+jPanel1.getSize()+"\nJframe size:"+muu.getSize()+"\nscroll size:"+commentsScPane.getSize());
-
-        if(commentsJtxtArea.isVisible()){
-            
+        if(commentsJtxtArea.isVisible()){      
             commentsJtxtArea.setVisible(false);
             commentsScPane.setVisible(false);
             this.setSize(176, 211);
-//            System.out.println("Hidden");
-//            erroLbl.setVisible(false);
-            //            commentsScPane.setSize(611, 53);
-            //            jPanel1.setSize(611, 53);
-            //            muu.setSize(611, 53);
-            //            this.pack();
-            //            System.out.println("jPanel1 size"+jPanel1.getSize()+"\nJframe size:"+muu.getSize()+"\nscroll size:"+commentsScPane.getSize());
-
         }else{
-            //511,45
-            //511,106
-            //muu.setSize(511, 106);
-
-            //            muu.setSize(611, 143);
-            //            jPanel1.setSize(611, 143);
-            //            commentsScPane.setSize(272, 94);
-
             commentsScPane.setVisible(true);
             commentsJtxtArea.setVisible(true);
             jPanel1.revalidate();
             jPanel1.repaint();
             this.setSize(469, 211);
-//            System.out.println("Displayed");
-//            erroLbl.setVisible(true);
-            //            System.out.println("jPanel1 size"+jPanel1.getSize()+"\nJframe size:"+muu.getSize()+"\nscroll size:"+commentsScPane.getSize());
-
         }
+    }//GEN-LAST:event_commentBtnActionPerformed
 
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void fileNameTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fileNameTxtKeyPressed
-        // TODO add your handling code here:
-        erroLbl.setText("");
-    }//GEN-LAST:event_fileNameTxtKeyPressed
-
+    /**On pressing any key in 'W' field, will clear the error label.*/
     private void wTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_wTxtKeyPressed
         // TODO add your handling code here:
       
             erroLbl.setText("");
      
     }//GEN-LAST:event_wTxtKeyPressed
-
+/**On pressing any key in 'H' field, will clear the error label.*/
     private void hTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_hTxtKeyPressed
         // TODO add your handling code here:
         erroLbl.setText("");
     }//GEN-LAST:event_hTxtKeyPressed
 
+    /**on releasing any key in "W" field, will validate if the data is Integers or not.
+     and select/deselect the related check box*/
     private void wTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_wTxtKeyReleased
         // TODO add your handling code here:
         if(!validateInt(wTxt.getText())){
@@ -433,6 +412,8 @@ public class MainUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_wTxtKeyReleased
 
+    /**on releasing any key in "H" field, will validate if the data is Integers or not.
+     and select/deselect the related check box*/
     private void hTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_hTxtKeyReleased
         // TODO add your handling code here:
         if(!validateInt(hTxt.getText())){
@@ -442,16 +423,6 @@ public class MainUI extends javax.swing.JFrame {
             hBox.setSelected(true);
         }
     }//GEN-LAST:event_hTxtKeyReleased
-
-    private void fileNameTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fileNameTxtKeyReleased
-        // TODO add your handling code here:
-//        System.out.println("isBlank"+fileNameTxt.getText().isBlank());
-        if(!fileNameTxt.getText().isEmpty()&&!fileNameTxt.getText().isBlank()){
-            fileBox.setSelected(true);
-        }else{
-            fileBox.setSelected(false);
-        }
-    }//GEN-LAST:event_fileNameTxtKeyReleased
 
     private void previewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewBtnActionPerformed
         // TODO add your handling code here:
@@ -480,10 +451,11 @@ public class MainUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_deleteActionPerformed
 
+    /**On closing window will check if there's unsaved screenshots or not and show confirmation message*/
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         if(isFileSaved==true){
-            newSession();
+            newSession(); //delete all screenshots and reset the storing array
             System.exit(0);
         }else{
             int result=JOptionPane.showConfirmDialog(null, "There are unsaved screenshots, Are you sure to exit?","Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE );
@@ -497,7 +469,32 @@ public class MainUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowClosing
 
-    
+    /**Browsing to get where to save word file*/
+    private void browseFileNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFileNameActionPerformed
+        // TODO add your handling code here:
+        FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
+        fDialog.setFile("Word File");
+        fDialog.setVisible(true);
+        //validate if the file name has extension or not.
+        //if not, get the file directory and select file name check box 
+        String fileName=fDialog.getFile();
+        if(fileName.contains(".")){
+            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
+            fileNameTxt.setText("");
+            fileBox.setSelected(false);
+        }else{
+            String dir = fDialog.getDirectory();
+            String path=dir+fileName;
+            fileNameTxt.setText(path);
+            fileBox.setSelected(true);
+        }
+    }//GEN-LAST:event_browseFileNameActionPerformed
+
+    /**Taking the screenshot and save it as png file.
+     @param  shotNameString Screenshot name
+     @exception AWTException 
+     @exception  HeadlessException
+     @exception  IOException*/
     public void takingShot(String shotNameString){
         try{
             
@@ -505,18 +502,19 @@ public class MainUI extends javax.swing.JFrame {
  
             Rectangle rectangle = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage bufferedImage = robot.createScreenCapture(rectangle);
-            File file = new File(shotName+".png");
-            
+            File file = new File(shotName+".png");           
             boolean status = ImageIO.write(bufferedImage, "png", file);
-//            System.out.println("Captured?"+status);
+            
             erroLbl.setText("Captured");
-            shotName=shotName+1;
-            isFileSaved=false;
-        }catch(Exception e){
-            System.out.println(e);
+            shotName=shotName+1; //increase shot name counter
+            isFileSaved=false; //marked as there's unsaved data
+        }catch(AWTException | HeadlessException | IOException e){
+            JOptionPane.showMessageDialog(null, e);
         }
     }
     
+    /**Will check if comment is displayed and has the correct data or not
+     @param  shotName Screenshot name*/
     public void validateComment(String shotName){
         if(commentsJtxtArea.isVisible()){
             String commentV=commentsJtxtArea.getText();
@@ -535,6 +533,9 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
     
+    /**Validate if the value is Integer or not, by trying to parse to Int
+     @param  validateV  the value to be validated
+     @return boolean*/
     public boolean validateInt(String validateV){
         boolean validInt=false;
         try{
@@ -548,9 +549,11 @@ public class MainUI extends javax.swing.JFrame {
         return validInt;
     }
     
+    /**creating new session by deleting all taken screenshot, reset the storing array
+     reset shot name counter and marked as all data is saved.*/
     public void newSession(){
          storing.arrayValidator();
-            for(int j=0;j<5;j++){
+            for(int j=0;j<200;j++){
                 File shotFile=new File(StoringCommShots.arr[0][j]);
                 shotFile.delete();
             }
@@ -561,7 +564,9 @@ public class MainUI extends javax.swing.JFrame {
             ImgView.iv=null;
     }
    
-    
+    /**Saving screenshot and Its comments to word file
+     * will validate file name, W and H fields then calling the method which write to word.
+     */
     public void save(){
          this.setSize(733, 211);
         String fileName=fileNameTxt.getText();
@@ -571,9 +576,11 @@ public class MainUI extends javax.swing.JFrame {
                 erroLbl.setText("Kindly fill 'File Name' field");
                 return;
             }else if(w.isEmpty()){
+              
                 erroLbl.setText("Kindly Fill 'W' Field");
                 return;
             }else if(h.isEmpty()){
+            
                 erroLbl.setText("Kindly Fill 'H' field");
                 return;
             }
@@ -591,21 +598,9 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
     
+    /**open Img preview JFrame and IF it's open, It will be bring to front.*/
     public void preview(){
-        
-//          ImgView iv=new ImgView();
-////        iv.setExtendedState(iv.MAXIMIZED_HORIZ);
-//        iv.setVisible(true);
-////        iv.setResizable(false);
-//        
-////        iv.revalidate();
-////        iv.repaint();
-//        
-//        iv.setLocationRelativeTo(null);
-
-//has bug after creating new session, It won;t work on run, but it works smooth on debug
-          ImgView.getObj().setVisible(true); //single tone
-        
+          ImgView.getObj().setVisible(true);      
     }
     
    
@@ -649,7 +644,9 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton browseFileName;
     private javax.swing.JButton captureBtn;
+    private javax.swing.JButton commentBtn;
     private javax.swing.JTextArea commentsJtxtArea;
     private javax.swing.JScrollPane commentsScPane;
     private javax.swing.JButton delete;
@@ -658,10 +655,10 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JTextField fileNameTxt;
     private javax.swing.JCheckBox hBox;
     private javax.swing.JTextField hTxt;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;

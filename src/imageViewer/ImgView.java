@@ -34,44 +34,28 @@ public class ImgView extends javax.swing.JFrame {
      * Creates new form ImgView
      */
     public ImgView() {
-      //still working on this, making preview open just one window
-        
-//        if(MainUI.activeImgView==true){
-//            setExtendedState( this.NORMAL );
-//            this.toFront();
-//        }else{
-            initComponents();
-            if(getNoShots()==0){
-                JOptionPane.showMessageDialog(null, "There're no added images to preview");
-                WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
-                Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
+        initComponents();
+        //check if there're no screenshots show message only
+        if(getNoShots()==0){
+            JOptionPane.showMessageDialog(null, "There're no added images to preview");
+            WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+            Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
 
-            }else{
-        //            System.out.println("label size:"+imgPreviewLbl.getSize());
-        //            imgPreviewLbl.setSize(1365, 598);
-        //            1365 x 598
+        }else{
+            //open the first image
+            settingIco(StoringCommShots.arr[0][0]);
+            comments.setText(StoringCommShots.arr[1][0]);//get the first comment
+            currPage.setText("1"); //set current page
+        }
 
-                    settingIco(StoringCommShots.arr[0][0]);
-                    comments.setText(StoringCommShots.arr[1][0]);
-        //            imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][0]));
-        //            imgPreviewLbl.setHorizontalAlignment(imgPreviewLbl.CENTER);
-        //            System.out.println(imgPreviewLbl.getSize());
-                    currPage.setText("1");
-                }
-
-                if(noOpages.getText().equals(currPage.getText())){
-                    nxtbtn.setEnabled(false);        
-                }
-                bkBtn.setEnabled(false);
-        //        StoringCommShots cs=new StoringCommShots();
-        //        System.out.println("------");
-        //        cs.displayArr();
-//                MainUI.activeImgView=true;
-//            }
-        
-        
+        if(noOpages.getText().equals(currPage.getText())){
+            nxtbtn.setEnabled(false); //if there's only one screenshot lock the navigation
+        }
+        bkBtn.setEnabled(false);//disable nvigate back button
+        this.setLocationRelativeTo(null);
     }
 
+    
      public static ImgView getObj(){
         if(iv==null){
             iv=new ImgView();
@@ -103,7 +87,8 @@ public class ImgView extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Preview Screenshots");
@@ -115,6 +100,7 @@ public class ImgView extends javax.swing.JFrame {
             }
         });
 
+        saveAsbtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/floppy_disk_edit.png"))); // NOI18N
         saveAsbtn.setText("Save as");
         saveAsbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,20 +108,21 @@ public class ImgView extends javax.swing.JFrame {
             }
         });
 
-        nxtbtn.setText(">");
+        nxtbtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/arrow_right_blue.png"))); // NOI18N
         nxtbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nxtbtnActionPerformed(evt);
             }
         });
 
-        bkBtn.setText("<");
+        bkBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/arrow_left_blue.png"))); // NOI18N
         bkBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bkBtnActionPerformed(evt);
             }
         });
 
+        delBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete.png"))); // NOI18N
         delBtn.setText("Delete");
         delBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,6 +142,7 @@ public class ImgView extends javax.swing.JFrame {
 
         jLabel2.setText("Comments");
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/floppy_disk_ok.png"))); // NOI18N
         jButton2.setText("update comments");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,32 +158,26 @@ public class ImgView extends javax.swing.JFrame {
                 .addComponent(imgPreviewLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(bkBtn)
-                        .addGap(36, 36, 36)
-                        .addComponent(nxtbtn)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(178, 178, 178)
-                                .addComponent(currPage)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(noOpages))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 412, Short.MAX_VALUE)
-                                .addComponent(jLabel2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(saveAsbtn)
-                        .addGap(137, 137, 137)
-                        .addComponent(delBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addGap(75, 75, 75)))
+                        .addComponent(currPage)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(noOpages)
+                        .addGap(32, 32, 32)
+                        .addComponent(bkBtn))
+                    .addComponent(saveAsbtn))
+                .addGap(18, 18, 18)
+                .addComponent(nxtbtn)
+                .addGap(100, 100, 100)
+                .addComponent(delBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(33, 33, 33)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(237, 237, 237))
         );
@@ -203,37 +185,48 @@ public class ImgView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(imgPreviewLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bkBtn)
-                            .addComponent(nxtbtn)
                             .addComponent(noOpages)
                             .addComponent(currPage)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(saveAsbtn)
-                            .addComponent(delBtn)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(21, 21, 21)
-                                .addComponent(jButton2))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel1)
+                            .addComponent(bkBtn)
+                            .addComponent(nxtbtn)
+                            .addComponent(delBtn))
+                        .addGap(18, 18, 18)
+                        .addComponent(saveAsbtn))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50))
         );
 
         jScrollPane1.setViewportView(jPanel1);
 
         jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Update comments");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Delete");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -252,8 +245,7 @@ public class ImgView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveAsbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsbtnActionPerformed
-        // TODO add your handling code here:
-        
+        //copy the selected image to the selected location
         FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
         fDialog.setFile("Screenshot");
         fDialog.setVisible(true);
@@ -283,8 +275,38 @@ public class ImgView extends javax.swing.JFrame {
 
     private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
         // TODO add your handling code here:
+        delete();
+
+        
+    }//GEN-LAST:event_delBtnActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        saveComments();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        ImgView.iv=null;
+//        MainUI.activeImgView=false;
+
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        delete();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        saveComments();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    /**Delete screenshot and its comment then shift the array*/
+    public void delete(){
         StoringCommShots cs=new StoringCommShots();
         File img=new File(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+        
         if(noOpages.getText().equals("1")){
             WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
             Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
@@ -295,8 +317,8 @@ public class ImgView extends javax.swing.JFrame {
             
         }else{
             img.delete();
+            
             //shifting array after delete
-
             int currPageindex=Integer.parseInt(currPage.getText())-1;
             int lastIndex=cs.getLastIndex();
             
@@ -304,18 +326,16 @@ public class ImgView extends javax.swing.JFrame {
                 StoringCommShots.arr[0][lastIndex]=null;
                 StoringCommShots.arr[1][lastIndex]=null;
             }else{
-                for(int i=Integer.parseInt(currPage.getText())-1;i<4;i++){
+                for(int i=Integer.parseInt(currPage.getText())-1;i<199;i++){
                     StoringCommShots.arr[0][i]=StoringCommShots.arr[0][i+1];
                     StoringCommShots.arr[1][i]=StoringCommShots.arr[1][i+1];
-                    if(i==3){
-                        StoringCommShots.arr[0][4]=null;
-                        StoringCommShots.arr[1][4]=null;
+                    if(i==198){
+                        StoringCommShots.arr[0][199]=null;
+                        StoringCommShots.arr[1][199]=null;
                     }
                 }
             }
-            
-            //open the previous image
-    //        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-2]);
+            //after shifting get previous screenshot if available, if not get next one
             if(bkBtn.isEnabled()){
                 bk();
             }else if(!bkBtn.isEnabled()&&nxtbtn.isEnabled()){
@@ -332,40 +352,30 @@ public class ImgView extends javax.swing.JFrame {
         }
         MainUI.shotName=MainUI.shotName-1;
         MainUI.isFileSaved=false;
-
-        
-    }//GEN-LAST:event_delBtnActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    }
+    
+    /**update the saved comments*/
+    public void saveComments(){
         StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]=comments.getText();
         MainUI.isFileSaved=false;
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        ImgView.iv=null;
-//        MainUI.activeImgView=false;
-
-    }//GEN-LAST:event_formWindowClosing
-/**
- * jLabel1.setIcon(new ImageIcon("C:\\Users\\Salah\\Downloads\\51IEqZXGe0L._AC_.jpg"));
-        jLabel1.setHorizontalAlignment(jLabel1.CENTER);
- */
+    }
     
+    /**get No of stored images
+     @return No of images*/
     public int getNoShots(){
         StoringCommShots cs=new StoringCommShots();
-
         int pages=cs.imgsNum();
         noOpages.setText(Integer.toString(pages));
         pagesNO=pages;
         return pages;
     }
     
+    /**Setting ICON to label*/
     public void settingIco(String resource){
         imgPreviewLbl.setIcon(new ImageIcon(new ImageIcon(resource).getImage().getScaledInstance(imgPreviewLbl.getWidth(), imgPreviewLbl.getHeight(), Image.SCALE_SMOOTH)));
     }
     
+    /**opening the previous screenshot and enable/disable navigators*/
     public void bk(){
         StoringCommShots cs=new StoringCommShots();
         currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())-1));
@@ -373,32 +383,37 @@ public class ImgView extends javax.swing.JFrame {
             nxtbtn.setEnabled(true);
         
         }
-        
-//        imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]));
+        //setting icon
         settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
         if(currPage.getText().equals("1")){
             bkBtn.setEnabled(false);
         }
-         comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
+        //setting comment
+        comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
     }
-    
+    /***open next screenshot and enable or disable navigator*/
     public void next(){
-        System.out.println("label size:"+imgPreviewLbl.getSize());
         StoringCommShots cs=new StoringCommShots();
          if(bkBtn.isEnabled()==false && !noOpages.getText().equals("1")){
             bkBtn.setEnabled(true);
         }
-//        imgPreviewLbl.setIcon(new ImageIcon(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())]));
         if(!currPage.getText().equals(Integer.toString(cs.imgsNum()))){
             currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())+1));  
-        }        
+        }
+//setting icon        
         settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
         if(noOpages.getText().equals(currPage.getText())||currPage.getText().equals(Integer.toString(cs.imgsNum()))){
             nxtbtn.setEnabled(false);        
         }
+        //setting comments
         comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
     }
     
+    /**Copy and paste image in specific location
+     @param imgin  IMG src
+     @param  imgOut  IMG will be saved to
+     @exception FileNotFoundException
+     @exception  IOException*/
     public void copyPasteImg(String imgin, String imgOut){
         try {
             FileInputStream in = new FileInputStream(imgin);
@@ -464,8 +479,9 @@ public class ImgView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
