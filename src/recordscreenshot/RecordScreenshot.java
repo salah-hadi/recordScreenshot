@@ -43,10 +43,6 @@ public class RecordScreenshot extends MainUI{
         MainUI mu=new MainUI();
         mu.setVisible(true);
         mu.setLocationRelativeTo(null);
-        
-
-        
-    
     }
     
 }

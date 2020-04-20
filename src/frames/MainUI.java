@@ -88,7 +88,6 @@ public class MainUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Screenshots recorder");
-        setAlwaysOnTop(true);
         setPreferredSize(new java.awt.Dimension(733, 211));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
