@@ -33,7 +33,7 @@ public class ImgView extends javax.swing.JFrame {
     /**
      * Creates new form ImgView
      */
-    public ImgView() {
+    public ImgView() {     
         initComponents();
         //check if there're no screenshots show message only
         if(getNoShots()==0){
@@ -288,8 +288,6 @@ public class ImgView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         ImgView.iv=null;
-//        MainUI.activeImgView=false;
-
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed

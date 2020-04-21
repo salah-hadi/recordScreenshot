@@ -46,7 +46,6 @@ public class MainUI extends javax.swing.JFrame {
         
         commentsJtxtArea.setVisible(false); //hidding comments field by default
         commentsScPane.setVisible(false);
-            
         this.setSize(176, 211);
     }
 
@@ -88,8 +87,16 @@ public class MainUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Screenshots recorder");
+        setAlwaysOnTop(true);
         setPreferredSize(new java.awt.Dimension(733, 211));
         setResizable(false);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -427,12 +434,15 @@ public class MainUI extends javax.swing.JFrame {
 
     private void previewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewBtnActionPerformed
         // TODO add your handling code here:
-      preview();
+      this.setAlwaysOnTop(false);
+        preview();
+      
 
     }//GEN-LAST:event_previewBtnActionPerformed
 
     private void previewMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewMenuActionPerformed
         // TODO add your handling code here:
+        this.setAlwaysOnTop(false);
         preview();
     }//GEN-LAST:event_previewMenuActionPerformed
 
@@ -459,6 +469,7 @@ public class MainUI extends javax.swing.JFrame {
             newSession(); //delete all screenshots and reset the storing array
             System.exit(0);
         }else{
+            this.setAlwaysOnTop(false);
             int result=JOptionPane.showConfirmDialog(null, "There are unsaved screenshots, Are you sure to exit?","Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE );
             if(result==JOptionPane.YES_OPTION){
                 newSession();
@@ -473,6 +484,7 @@ public class MainUI extends javax.swing.JFrame {
     /**Browsing to get where to save word file*/
     private void browseFileNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFileNameActionPerformed
         // TODO add your handling code here:
+        this.setAlwaysOnTop(false);
         FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
         fDialog.setFile("Word File");
         fDialog.setVisible(true);
@@ -490,6 +502,11 @@ public class MainUI extends javax.swing.JFrame {
             fileBox.setSelected(true);
         }
     }//GEN-LAST:event_browseFileNameActionPerformed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        // TODO add your handling code here:
+        this.setAlwaysOnTop(true);
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**Taking the screenshot and save it as png file.
      @param  shotNameString Screenshot name
@@ -604,6 +621,7 @@ public class MainUI extends javax.swing.JFrame {
           ImgView.getObj().setVisible(true);      
     }
     
+ 
    
     /**
      * @param args the command line arguments
