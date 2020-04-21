@@ -1,2 +1,2 @@
 # recordScreenshot
-Created by Netbeans IDE
+The use IDE : Netbeans IDE
