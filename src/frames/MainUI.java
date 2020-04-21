@@ -492,6 +492,7 @@ public class MainUI extends javax.swing.JFrame {
         //if not, get the file directory and select file name check box 
         String fileName=fDialog.getFile();
         if(fileName.contains(".")){
+            this.setAlwaysOnTop(false);
             JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
             fileNameTxt.setText("");
             fileBox.setSelected(false);
