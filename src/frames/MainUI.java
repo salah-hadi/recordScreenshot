@@ -360,6 +360,7 @@ public class MainUI extends javax.swing.JFrame {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here: 
         save();
+        
     }//GEN-LAST:event_saveActionPerformed
 
     private void captureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureBtnActionPerformed
@@ -537,6 +538,7 @@ public class MainUI extends javax.swing.JFrame {
     public void validateComment(String shotName){
         if(commentsJtxtArea.isVisible()){
             String commentV=commentsJtxtArea.getText();
+            System.out.println("Comment is: "+commentsJtxtArea.getText());
             if(commentV.isEmpty()){
                 erroLbl.setText("you can't take screenshot without entering a comment.");
             }else{
@@ -577,6 +579,7 @@ public class MainUI extends javax.swing.JFrame {
                 shotFile.delete();
             }
             erroLbl.setText("New session started.");
+            commentsJtxtArea.setText("");
             storing.resetArr();
             shotName=0;
             isFileSaved=true;
@@ -608,6 +611,8 @@ public class MainUI extends javax.swing.JFrame {
             writtingToWord wt=new writtingToWord(fileName,Integer.parseInt(w),Integer.parseInt(h));
             erroLbl.setText("Word File is created successfully.");
             isFileSaved=true;
+            newSession();
+            erroLbl.setText("Word file has been created and new session started.");
         }else if(!hBox.isSelected()){
             erroLbl.setText("Kindly fill 'H' field with Integres");
         }else if(!wBox.isSelected()){

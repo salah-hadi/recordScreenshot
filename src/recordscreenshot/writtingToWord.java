@@ -48,7 +48,7 @@ public class writtingToWord extends MainUI{
             FileOutputStream out = new FileOutputStream( new File(fileName+"1.docx"));
             XWPFParagraph pa=document.createParagraph();
             XWPFRun run=pa.createRun();
-            run.setText("Start document");
+//            run.setText("Start document");
             run.addCarriageReturn();
             File imgFile;
             String imgFileName;
@@ -68,7 +68,31 @@ public class writtingToWord extends MainUI{
                              run.addCarriageReturn();
 
                         }else if(!arrayVal1.isEmpty()&&!arrayVal0.isEmpty()){
-                            run.setText(arrayVal1);
+                            /////////////////////////////////////////////////////////////////
+                        //    run.setText(arrayVal1);
+                            
+                            if(arrayVal1.contains("\n")){
+                                String[] stringsOnNewLines = arrayVal1.split( "\n" );
+                                for ( int i = 0; i < stringsOnNewLines.length; i++ ) {
+
+                                    // For every run except last one, add a carriage return.
+                                    String textForLine = stringsOnNewLines[i];
+                                    if ( i < stringsOnNewLines.length - 1 ) {
+                                        run.setText(textForLine);
+                                        run.addCarriageReturn();
+                                    }
+                                    else {
+                                        run.setText(textForLine);
+                                        run.addCarriageReturn();
+                                    }
+                                }
+                            }else{
+                                run.setText(arrayVal1);
+                            }
+                            
+                            
+                            
+                  ////////////////////////////////////////          
                             run.addCarriageReturn();
 
                             imgFile=new File(arrayVal0);
@@ -79,7 +103,7 @@ public class writtingToWord extends MainUI{
                         }
                     }
                
-            run.setText("END of Doc.");
+//            run.setText("END of Doc.");
 
             document.write(out);
             out.close();
