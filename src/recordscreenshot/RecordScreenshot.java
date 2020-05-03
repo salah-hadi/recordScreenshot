@@ -5,6 +5,7 @@
  */
 package recordscreenshot;
 
+import frames.FullSc;
 import frames.MainUI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
