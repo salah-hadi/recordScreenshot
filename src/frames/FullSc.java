@@ -9,13 +9,18 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -54,8 +59,8 @@ public class FullSc extends javax.swing.JFrame {
 //this.setState(0);
 
     }
-    int x, y, x2, y2;
-    
+    int x, y, x2, y2, pw, ph;
+    int cx,cy,cx2,cy2,cw,ch;
     
     public static FullSc area=null;
      public static FullSc getObj(){
@@ -64,6 +69,27 @@ public class FullSc extends javax.swing.JFrame {
         }
         return area;
     }
+     
+     public int xValue(){
+         System.out.println("X:"+x);
+         return x;
+         
+     }
+      public int yValue(){
+         System.out.println("y:"+y);
+         return y;
+         
+     }
+       public int pwValue(){
+         System.out.println("pw:"+pw);
+         return pw;
+         
+     }
+        public int phValue(){
+         System.out.println("ph:"+ph);
+         return ph;
+         
+     }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -146,8 +172,9 @@ public class FullSc extends javax.swing.JFrame {
             }
            
         }
-//           MainUI mu=new MainUI();
-//           mu.setAlwaysOnTop(true);
+           File img=new File("fullScreen.png");
+                img.delete();
+
     }//GEN-LAST:event_formWindowClosing
 
     private void fullScImgMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fullScImgMouseReleased
@@ -157,6 +184,7 @@ public class FullSc extends javax.swing.JFrame {
         
         PopUpDemo menu = new PopUpDemo();
         menu.show(fullScImg, x2, y2);
+        
 
     }//GEN-LAST:event_fullScImgMouseReleased
 
@@ -188,8 +216,8 @@ public class FullSc extends javax.swing.JFrame {
         public void drawPerfectRect(Graphics g, int x, int y, int x2, int y2) {
             int px = Math.min(x,x2);
             int py = Math.min(y,y2);
-            int pw=Math.abs(x-x2);
-            int ph=Math.abs(y-y2);
+            pw=Math.abs(x-x2);
+            ph=Math.abs(y-y2);
             g.setColor(Color.RED);
             g.drawRect(px, py, pw, ph);
         }
@@ -202,20 +230,37 @@ public class FullSc extends javax.swing.JFrame {
 //        g2d.drawRect(x, y, x2, y2); 
 //        
 //    }
+        public void clearRect(){
+            cx=x;
+            cy=y;
+            cx2=x2;
+            cy2=y2;
+            cw=pw;
+            ch=ph;
+            x=y=x2=y2=0;
+            repaint();
+            
+        }
  
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-//        drawRectangles(g);
-        drawPerfectRect(g, x, y, x2, y2);
+        if(x==0&&y==0&x2==0&&y2==0){
+            g.drawRect(x, y, x2, y2);
+            
+        }else{
+            drawPerfectRect(g, x, y, x2, y2);
+        }
     }
+    
+    
     
     public void capture(){
         try {
             int px = Math.min(x,x2);
             int py = Math.min(y,y2);
-            int pw=Math.abs(x-x2);
-            int ph=Math.abs(y-y2);
+            pw=Math.abs(x-x2);
+            ph=Math.abs(y-y2);
             Robot robot = new Robot();
             
             Rectangle rectangle = new Rectangle(px, py, pw, ph);
@@ -287,20 +332,58 @@ public class FullSc extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel fullScImg;
-    private javax.swing.JLabel imgLbl;
+    public javax.swing.JPanel fullScImg;
+    public javax.swing.JLabel imgLbl;
     // End of variables declaration//GEN-END:variables
 }
 
 class PopUpDemo extends JPopupMenu {
     public PopUpDemo() {
         JMenuItem save = new JMenuItem("Save");
+        save.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File shotFile=new File("fullScreen.png");
+                    BufferedImage bufferedImage = ImageIO.read(Files.newInputStream(Paths.get(shotFile.getAbsolutePath())));
+                    FullSc ss=new FullSc();
+                    BufferedImage crooped=bufferedImage.getSubimage(FullSc.getObj().xValue(), FullSc.getObj().yValue(), FullSc.getObj().pwValue(), FullSc.getObj().phValue()); 
+                   //create new file with name as shotName parameter and increment it by 1
+                    ImageIO.write(crooped, "png", new File("crooped.png"));
+                    //open the ImgView frame with the result
+                } catch (IOException ex) {
+                    Logger.getLogger(PopUpDemo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        });
+        
         JMenuItem reCapture = new JMenuItem("Recapture");
+        reCapture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FullSc.getObj().clearRect();
+            }
+        });
+        
+        
+        
         JMenuItem cancel = new JMenuItem("Cancel");
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FullSc.getObj().setVisible(false);
+                FullSc.getObj().dispose();
+                
+            }
+        });
         JMenuItem email = new JMenuItem("Send By E-mail");
         add(save);
         add(reCapture);
         add(cancel);
         add(email);
+        
     }
+    
+    
 }
