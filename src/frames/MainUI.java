@@ -538,6 +538,7 @@ public class MainUI extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FullSc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+//<<<<<<< HEAD
 //        FullSc ss=new FullSc();
        
 
@@ -551,6 +552,18 @@ public class MainUI extends javax.swing.JFrame {
 //        this.foc
 //        FloatingOnArea fa=new FloatingOnArea();
 //        fa.setVisible(true);
+//=======
+//        FullSc ss=new FullSc();
+//       
+//
+//        
+//        System.out.println("Decorated?!"+ss.isUndecorated());
+//        if(ss.isUndecorated()==true){
+////            ss.setUndecorated(false);
+//        }
+//        ss.setExtendedState(ss.MAXIMIZED_BOTH); 
+//        ss.setVisible(true);
+//>>>>>>> origin/master
 //         ss.setUndecorated(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
