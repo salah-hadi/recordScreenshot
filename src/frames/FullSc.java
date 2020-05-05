@@ -9,7 +9,6 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -21,7 +20,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import recordscreenshot.RecordScreenshot;
@@ -77,7 +78,6 @@ public class FullSc extends javax.swing.JFrame {
         imgLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setAlwaysOnTop(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -154,10 +154,10 @@ public class FullSc extends javax.swing.JFrame {
         // TODO add your handling code here:
         setEndPoint(evt.getX(), evt.getY());
         repaint();
-        //        x2=evt.getX();
-        //        y2=evt.getY();
-        //
-        //        repaint();
+        
+        PopUpDemo menu = new PopUpDemo();
+        menu.show(fullScImg, x2, y2);
+
     }//GEN-LAST:event_fullScImgMouseReleased
 
     private void fullScImgMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fullScImgMousePressed
@@ -176,11 +176,13 @@ public class FullSc extends javax.swing.JFrame {
      public void setStartPoint(int x, int y) {
             this.x = x;
             this.y = y;
+//            System.out.println("X:"+x+" Y:"+y);
         }
 
         public void setEndPoint(int x, int y) {
             x2 = (x);
             y2 = (y);
+//            System.out.println("X:"+x2+" Y:"+y2);
         }
 
         public void drawPerfectRect(Graphics g, int x, int y, int x2, int y2) {
@@ -188,17 +190,18 @@ public class FullSc extends javax.swing.JFrame {
             int py = Math.min(y,y2);
             int pw=Math.abs(x-x2);
             int ph=Math.abs(y-y2);
+            g.setColor(Color.RED);
             g.drawRect(px, py, pw, ph);
         }
 
         ///////////////
-         void drawRectangles(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        	g2d.setColor(Color.RED);
-//        g2d.fillRect(x, y, x2, y2);
-        g2d.drawRect(x, y, x2, y2); 
-        
-    }
+//         void drawRectangles(Graphics g) {
+//        Graphics2D g2d = (Graphics2D) g;
+//        	g2d.setColor(Color.RED);
+////        g2d.fillRect(x, y, x2, y2);
+//        g2d.drawRect(x, y, x2, y2); 
+//        
+//    }
  
     @Override
     public void paint(Graphics g) {
@@ -287,4 +290,17 @@ public class FullSc extends javax.swing.JFrame {
     private javax.swing.JPanel fullScImg;
     private javax.swing.JLabel imgLbl;
     // End of variables declaration//GEN-END:variables
+}
+
+class PopUpDemo extends JPopupMenu {
+    public PopUpDemo() {
+        JMenuItem save = new JMenuItem("Save");
+        JMenuItem reCapture = new JMenuItem("Recapture");
+        JMenuItem cancel = new JMenuItem("Cancel");
+        JMenuItem email = new JMenuItem("Send By E-mail");
+        add(save);
+        add(reCapture);
+        add(cancel);
+        add(email);
+    }
 }
