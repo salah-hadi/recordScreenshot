@@ -5,7 +5,8 @@
  */
 /**Tasks**/
 //////////////on closing imgPrview need to make MaiUI not minimized
-////// add edit button which will open painter
+////// add edit button which will open painter (Done)
+////// fix save as "." message
 package imageViewer;
 
 import java.awt.Image;
@@ -16,16 +17,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import recordscreenshot.StoringCommShots;
 import frames.MainUI;
-import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -95,6 +97,7 @@ public class ImgView extends javax.swing.JFrame {
         comments = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        edit = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -160,6 +163,13 @@ public class ImgView extends javax.swing.JFrame {
             }
         });
 
+        edit.setText("Edit");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -177,16 +187,20 @@ public class ImgView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(noOpages)
                         .addGap(32, 32, 32)
-                        .addComponent(bkBtn))
-                    .addComponent(saveAsbtn))
-                .addGap(18, 18, 18)
-                .addComponent(nxtbtn)
-                .addGap(100, 100, 100)
-                .addComponent(delBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(33, 33, 33)
-                .addComponent(jLabel2)
+                        .addComponent(bkBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(nxtbtn)
+                        .addGap(100, 100, 100)
+                        .addComponent(delBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(saveAsbtn)
+                        .addGap(30, 30, 30)
+                        .addComponent(edit)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(237, 237, 237))
@@ -209,7 +223,9 @@ public class ImgView extends javax.swing.JFrame {
                             .addComponent(nxtbtn)
                             .addComponent(delBtn))
                         .addGap(18, 18, 18)
-                        .addComponent(saveAsbtn))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(saveAsbtn)
+                            .addComponent(edit)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50))
         );
@@ -325,6 +341,18 @@ public class ImgView extends javax.swing.JFrame {
         // TODO add your handling code here:
         saveComments();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        try {
+            // TODO add your handling code here:
+            File testing= new File(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+            String fullPath=testing.getAbsolutePath();
+            painter(fullPath);
+            settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_editActionPerformed
 
     /**Delete screenshot and its comment then shift the array*/
     public void delete() throws IOException{
@@ -502,6 +530,25 @@ public class ImgView extends javax.swing.JFrame {
             bkBtn.setEnabled(true);
         } 
     }
+    
+    //open painter
+    public void painter(String imgPath){
+        try {
+            ProcessBuilder builder = new ProcessBuilder(
+                    "cmd.exe", "/c", "mspaint "+imgPath);
+            builder.redirectErrorStream(true);
+            Process p = builder.start();
+            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while (true) {
+                line = r.readLine();
+                if (line == null) { break; }
+                System.out.println(line);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * 
      * @param args the command line arguments
@@ -547,6 +594,7 @@ public class ImgView extends javax.swing.JFrame {
     private javax.swing.JTextArea comments;
     private javax.swing.JLabel currPage;
     private javax.swing.JButton delBtn;
+    private javax.swing.JButton edit;
     private javax.swing.JLabel imgPreviewLbl;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
