@@ -3,6 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/**Tasks**/
+//////////////on closing imgPrview need to make MaiUI not minimized
+////// add edit button which will open painter
 package imageViewer;
 
 import java.awt.Image;
@@ -13,15 +16,21 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import recordscreenshot.StoringCommShots;
 import frames.MainUI;
+import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 /**
  *
  * @author Salah
@@ -33,7 +42,7 @@ public class ImgView extends javax.swing.JFrame {
     /**
      * Creates new form ImgView
      */
-    public ImgView() {     
+    public ImgView() throws IOException {     
         initComponents();
         //check if there're no screenshots show message only
         if(getNoShots()==0){
@@ -53,10 +62,11 @@ public class ImgView extends javax.swing.JFrame {
         }
         bkBtn.setEnabled(false);//disable nvigate back button
         this.setLocationRelativeTo(null);
+        
     }
 
     
-     public static ImgView getObj(){
+     public static ImgView getObj() throws IOException{
         if(iv==null){
             iv=new ImgView();
         }
@@ -263,19 +273,31 @@ public class ImgView extends javax.swing.JFrame {
     }//GEN-LAST:event_saveAsbtnActionPerformed
 
     private void nxtbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nxtbtnActionPerformed
-        // TODO add your handling code here:
-        next();
+        try {
+            // TODO add your handling code here:
+            next();
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_nxtbtnActionPerformed
 
     private void bkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkBtnActionPerformed
-        // TODO add your handling code here:
-        bk();
+        try {
+            // TODO add your handling code here:
+            bk();
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_bkBtnActionPerformed
 
     private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
-        // TODO add your handling code here:
-        delete();
+        try {
+            // TODO add your handling code here:
+            delete();
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         
     }//GEN-LAST:event_delBtnActionPerformed
@@ -291,8 +313,12 @@ public class ImgView extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-        delete();
+        try {
+            // TODO add your handling code here:
+            delete();
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -301,7 +327,7 @@ public class ImgView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**Delete screenshot and its comment then shift the array*/
-    public void delete(){
+    public void delete() throws IOException{
         StoringCommShots cs=new StoringCommShots();
         File img=new File(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
         
@@ -369,12 +395,46 @@ public class ImgView extends javax.swing.JFrame {
     }
     
     /**Setting ICON to label*/
-    public void settingIco(String resource){
-        imgPreviewLbl.setIcon(new ImageIcon(new ImageIcon(resource).getImage().getScaledInstance(imgPreviewLbl.getWidth(), imgPreviewLbl.getHeight(), Image.SCALE_SMOOTH)));
+    public void settingIco(String resource) throws IOException{
+        InputStream img=null;
+        int iconW=0;
+        int iconH=0;
+        try {
+            /////
+            int lblW=imgPreviewLbl.getWidth();
+            int lblH=imgPreviewLbl.getHeight();
+            
+            img= Files.newInputStream(Paths.get(new File(resource).getAbsolutePath()));
+            BufferedImage bimg = ImageIO.read(img);
+            int resourceW= bimg.getWidth();
+            int resourceH= bimg.getHeight();
+            
+            
+            
+            if(resourceW>=lblW){
+                iconW=lblW;
+            }else if(resourceW<lblW){
+                iconW=resourceW;
+            }
+            
+            if(resourceH>=lblH){
+                iconH=lblH;
+            }else if(resourceH<lblH){
+                iconH=resourceH;
+            }
+            
+            imgPreviewLbl.setIcon(new ImageIcon(new ImageIcon(resource).getImage().getScaledInstance(iconW, iconH, Image.SCALE_SMOOTH)));
+            imgPreviewLbl.setHorizontalAlignment(imgPreviewLbl.CENTER);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            img.close();
+        }
     }
     
     /**opening the previous screenshot and enable/disable navigators*/
-    public void bk(){
+    public void bk() throws IOException{
         StoringCommShots cs=new StoringCommShots();
         currPage.setText(Integer.toString(Integer.parseInt(currPage.getText())-1));
         if(nxtbtn.isEnabled()==false&&!currPage.getText().equals(Integer.toString(cs.imgsNum()))){
@@ -390,7 +450,7 @@ public class ImgView extends javax.swing.JFrame {
         comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
     }
     /***open next screenshot and enable or disable navigator*/
-    public void next(){
+    public void next() throws IOException{
         StoringCommShots cs=new StoringCommShots();
          if(bkBtn.isEnabled()==false && !noOpages.getText().equals("1")){
             bkBtn.setEnabled(true);
@@ -431,6 +491,17 @@ public class ImgView extends javax.swing.JFrame {
             Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    //open last image
+    public void openLast() throws IOException{
+        currPage.setText(noOpages.getText());
+        settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
+        comments.setText(StoringCommShots.arr[1][Integer.parseInt(currPage.getText())-1]);
+        nxtbtn.setEnabled(false);
+        if(!noOpages.getText().equals("1")){
+            bkBtn.setEnabled(true);
+        } 
+    }
     /**
      * 
      * @param args the command line arguments
@@ -462,7 +533,11 @@ public class ImgView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ImgView().setVisible(true);
+                try {
+                    new ImgView().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

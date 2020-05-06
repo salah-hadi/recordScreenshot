@@ -3,22 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/**Tasks**/
+///////////need to add option message on each error which make Jframe not on top and close the form
+///////////fix when to be on top and when not
+//// //////adjust send by E-mail feature
 package frames;
 
+import imageViewer.ImgView;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -31,6 +37,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import recordscreenshot.RecordScreenshot;
+import recordscreenshot.StoringCommShots;
 
 /**
  *
@@ -71,22 +78,18 @@ public class FullSc extends javax.swing.JFrame {
     }
      
      public int xValue(){
-         System.out.println("X:"+x);
          return x;
          
      }
       public int yValue(){
-         System.out.println("y:"+y);
          return y;
          
      }
        public int pwValue(){
-         System.out.println("pw:"+pw);
          return pw;
          
      }
         public int phValue(){
-         System.out.println("ph:"+ph);
          return ph;
          
      }
@@ -173,7 +176,8 @@ public class FullSc extends javax.swing.JFrame {
            
         }
            File img=new File("fullScreen.png");
-                img.delete();
+            img.delete();
+              
 
     }//GEN-LAST:event_formWindowClosing
 
@@ -255,27 +259,27 @@ public class FullSc extends javax.swing.JFrame {
     
     
     
-    public void capture(){
-        try {
-            int px = Math.min(x,x2);
-            int py = Math.min(y,y2);
-            pw=Math.abs(x-x2);
-            ph=Math.abs(y-y2);
-            Robot robot = new Robot();
-            
-            Rectangle rectangle = new Rectangle(px, py, pw, ph);
-            BufferedImage bufferedImage = robot.createScreenCapture(rectangle);
-            File file = new File("testing.png");           
-            boolean status = ImageIO.write(bufferedImage, "png", file);
-            if(status==true){
-            }
-        } catch (AWTException ex) {
-            Logger.getLogger(FullSc.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FullSc.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-    }
+//    public void capture(){
+//        try {
+//            int px = Math.min(x,x2);
+//            int py = Math.min(y,y2);
+//            pw=Math.abs(x-x2);
+//            ph=Math.abs(y-y2);
+//            Robot robot = new Robot();
+//            
+//            Rectangle rectangle = new Rectangle(px, py, pw, ph);
+//            BufferedImage bufferedImage = robot.createScreenCapture(rectangle);
+//            File file = new File("testing.png");           
+//            boolean status = ImageIO.write(bufferedImage, "png", file);
+//            if(status==true){
+//            }
+//        } catch (AWTException ex) {
+//            Logger.getLogger(FullSc.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(FullSc.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//            
+//    }
     
     public void takingShot(){
         try{
@@ -294,6 +298,12 @@ public class FullSc extends javax.swing.JFrame {
         }
     }
    
+    public void close(){
+        WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
+        area=null;
+        
+}
  
 
     /**
@@ -345,12 +355,27 @@ class PopUpDemo extends JPopupMenu {
             public void actionPerformed(ActionEvent e) {
                 try {
                     File shotFile=new File("fullScreen.png");
-                    BufferedImage bufferedImage = ImageIO.read(Files.newInputStream(Paths.get(shotFile.getAbsolutePath())));
-                    FullSc ss=new FullSc();
+                    InputStream shotFile1=Files.newInputStream(Paths.get(shotFile.getAbsolutePath()));
+//                    BufferedImage bufferedImage = ImageIO.read(Files.newInputStream(Paths.get(shotFile.getAbsolutePath())));
+                    BufferedImage bufferedImage = ImageIO.read(shotFile1);
+//                    FullSc ss=new FullSc();
                     BufferedImage crooped=bufferedImage.getSubimage(FullSc.getObj().xValue(), FullSc.getObj().yValue(), FullSc.getObj().pwValue(), FullSc.getObj().phValue()); 
                    //create new file with name as shotName parameter and increment it by 1
-                    ImageIO.write(crooped, "png", new File("crooped.png"));
+                    ImageIO.write(crooped, "png", new File(MainUI.shotName+".png"));
+                    shotFile1.close();
+                    StoringCommShots storing=new StoringCommShots();
+                    storing.setArr(MainUI.shotName+".png", "", MainUI.shotName);
+                    MainUI.shotName=MainUI.shotName+1; //increase shot name counter
+                    MainUI.isFileSaved=false; //marked as there's unsaved data
                     //open the ImgView frame with the result
+                    //delete the old image
+//                    FullSc.getObj().setVisible(false);
+                    
+                    
+                    FullSc.getObj().close();
+                    
+                    ImgView.getObj().setVisible(true);
+                    ImgView.getObj().openLast();
                 } catch (IOException ex) {
                     Logger.getLogger(PopUpDemo.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -372,9 +397,7 @@ class PopUpDemo extends JPopupMenu {
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FullSc.getObj().setVisible(false);
-                FullSc.getObj().dispose();
-                
+                FullSc.getObj().close();                
             }
         });
         JMenuItem email = new JMenuItem("Send By E-mail");

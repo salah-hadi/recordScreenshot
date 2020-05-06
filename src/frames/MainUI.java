@@ -15,6 +15,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -327,6 +329,7 @@ public class MainUI extends javax.swing.JFrame {
         });
         jMenu1.add(saveMenu);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem1.setText("capture specific");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -443,9 +446,13 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_hTxtKeyReleased
 
     private void previewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewBtnActionPerformed
-        // TODO add your handling code here:
-      this.setAlwaysOnTop(false);
-        preview();
+        try {
+            // TODO add your handling code here:
+            this.setAlwaysOnTop(false);
+            preview();
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
       
 
     }//GEN-LAST:event_previewBtnActionPerformed
@@ -453,7 +460,11 @@ public class MainUI extends javax.swing.JFrame {
     private void previewMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewMenuActionPerformed
         // TODO add your handling code here:
         this.setAlwaysOnTop(false);
-        preview();
+        try {
+            preview();
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_previewMenuActionPerformed
 
     private void newSessionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSessionMenuActionPerformed
@@ -681,7 +692,7 @@ public class MainUI extends javax.swing.JFrame {
     }
     
     /**open Img preview JFrame and IF it's open, It will be bring to front.*/
-    public void preview(){
+    public void preview() throws IOException{
           ImgView.getObj().setVisible(true);      
     }
     
