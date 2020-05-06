@@ -5,6 +5,7 @@
  */
 /**Tasks**/
 //////////////on closing imgPrview need to make MaiUI not minimized
+///working on save as and browse (in progress)
 package imageViewer;
 
 import java.awt.Image;
@@ -275,21 +276,51 @@ public class ImgView extends javax.swing.JFrame {
         fDialog.setVisible(true);
         
         String fileName=fDialog.getFile();
-        System.out.println("contains:"+fileName.contains(".png"));
-        boolean contains=fileName.contains(".png");
-//        if(!fileName.contains(".png")||!fileName.contains(".PNG")){
-        if(contains==false){
-            fileName=fileName+".png";
-        }
-//        System.out.println("File Name is:"+fileName);
-//        if(fileName.contains(".")){
-//            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
-//        }else{
+        /////
+        ////return file extension
+        if(fileName.contains(".")){
+            int length=fileName.length();
+//            char searching;
+            int pointIndex=0;
+            for(int i=length-1;i>0;i--){
+                if(fileName.charAt(i)=='.'){
+                    pointIndex=i;
+                    break;
+                }
+            }
+            String extension=".png";/// make list of string to return value from 
+            if(pointIndex!=0||pointIndex!=length-1){
+                extension=fileName.substring(pointIndex,length);
+                if(!extension.equals(".png")){
+                    JOptionPane.showMessageDialog(null, "Kindly select/enter a 'png' file");
+                }else{
+                    String dir = fDialog.getDirectory();
+                    String path=dir+fileName;
+                    copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Enter valid file name.");
+            }            
+            
+            
+        }else{
             String dir = fDialog.getDirectory();
-            String path=dir+fileName;
-            System.out.println("Path is:"+path);
+            String path=dir+fileName+".png";
             copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
+        }
+        /////
+//        System.out.println("contains:"+fileName.contains(".png"));
+//        boolean contains=fileName.contains(".png");
+////        if(!fileName.contains(".png")||!fileName.contains(".PNG")){
+//        if(contains==false){
+//            fileName=fileName+".png";
 //        }
+//
+//            String dir = fDialog.getDirectory();
+//            String path=dir+fileName;
+////            System.out.println("Path is:"+path);
+//            copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
+////        }
         
     }//GEN-LAST:event_saveAsbtnActionPerformed
 
