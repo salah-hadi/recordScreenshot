@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 /**Tasks**/
-//// fix save "." message
 //// fix performance issue when open preview
 package frames;
 
