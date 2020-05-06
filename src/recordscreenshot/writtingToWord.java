@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
@@ -37,15 +38,15 @@ public class writtingToWord extends MainUI{
         try{
             storing.arrayValidator();
             XWPFDocument document=null;
-            File f=new File(fileName+".docx");
+            File f=new File(fileName);
             boolean existing=f.exists();
             if(existing==true){
-                document = new XWPFDocument(OPCPackage.open(fileName+".docx"));
+                document = new XWPFDocument(OPCPackage.open(fileName));
             }else{
                 document = new XWPFDocument(); 
             }
 
-            FileOutputStream out = new FileOutputStream( new File(fileName+"1.docx"));
+            FileOutputStream out = new FileOutputStream( new File(fileName+"1"));
             XWPFParagraph pa=document.createParagraph();
             XWPFRun run=pa.createRun();
 //            run.setText("Start document");
@@ -109,15 +110,15 @@ public class writtingToWord extends MainUI{
             out.close();
             sl.close();
             document.close();
-            File f3=new File(fileName+"1.docx");
+            File f3=new File(fileName+"1");
            if(f3.exists()){
-               File f5=new File(fileName+".docx");
+               File f5=new File(fileName);
                if(f5.exists()){
                    f5.delete();
                }
                
                //renaming file after finising
-               File f4=new File(fileName+".docx");
+               File f4=new File(fileName);
                if(f3.renameTo(f4)){
 //                   System.out.println("Renamed");
                }
@@ -128,11 +129,12 @@ public class writtingToWord extends MainUI{
            }
             storing.afterArrValidator();
         }catch(FileNotFoundException e){
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e);
+            
         }catch(IOException io){
-            System.out.println(io);
+            JOptionPane.showMessageDialog(null, io);
         }catch(InvalidFormatException oo){
-            System.out.println(oo);
+            JOptionPane.showMessageDialog(null, oo);
         }
         
     }

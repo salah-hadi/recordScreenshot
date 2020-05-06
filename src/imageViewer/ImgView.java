@@ -5,8 +5,6 @@
  */
 /**Tasks**/
 //////////////on closing imgPrview need to make MaiUI not minimized
-////// add edit button which will open painter (Done)
-////// fix save as "." message
 package imageViewer;
 
 import java.awt.Image;
@@ -273,18 +271,25 @@ public class ImgView extends javax.swing.JFrame {
     private void saveAsbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsbtnActionPerformed
         //copy the selected image to the selected location
         FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
-        fDialog.setFile("Screenshot");
+        fDialog.setFile("*.png");
         fDialog.setVisible(true);
         
         String fileName=fDialog.getFile();
-        if(fileName.contains(".")){
-            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
-        }else{
+        System.out.println("contains:"+fileName.contains(".png"));
+        boolean contains=fileName.contains(".png");
+//        if(!fileName.contains(".png")||!fileName.contains(".PNG")){
+        if(contains==false){
+            fileName=fileName+".png";
+        }
+//        System.out.println("File Name is:"+fileName);
+//        if(fileName.contains(".")){
+//            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
+//        }else{
             String dir = fDialog.getDirectory();
             String path=dir+fileName;
-//            System.out.println("Path is:"+path);
-            copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path+".png");
-        }
+            System.out.println("Path is:"+path);
+            copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
+//        }
         
     }//GEN-LAST:event_saveAsbtnActionPerformed
 

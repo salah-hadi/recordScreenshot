@@ -74,7 +74,6 @@ public class MainUI extends javax.swing.JFrame {
         hBox = new javax.swing.JCheckBox();
         fileBox = new javax.swing.JCheckBox();
         browseFileName = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         commentBtn = new javax.swing.JButton();
         commentsScPane = new javax.swing.JScrollPane();
@@ -151,8 +150,6 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText(".docx");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -172,11 +169,8 @@ public class MainUI extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(browseFileName))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(fileNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                    .addComponent(fileNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wBox)
                     .addComponent(hBox)
@@ -189,11 +183,9 @@ public class MainUI extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(browseFileName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(fileNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4))
+                    .addComponent(fileNameTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fileBox, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -374,8 +366,8 @@ public class MainUI extends javax.swing.JFrame {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here: 
-        save();
-        
+        erroLbl.setText("");
+        save();     
     }//GEN-LAST:event_saveActionPerformed
 
     private void captureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureBtnActionPerformed
@@ -510,22 +502,24 @@ public class MainUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.setAlwaysOnTop(false);
         FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
-        fDialog.setFile("Word File");
+        fDialog.setFile("*.docx");
         fDialog.setVisible(true);
         //validate if the file name has extension or not.
         //if not, get the file directory and select file name check box 
         String fileName=fDialog.getFile();
-        if(fileName.contains(".")){
-            this.setAlwaysOnTop(false);
-            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
-            fileNameTxt.setText("");
-            fileBox.setSelected(false);
-        }else{
+        if(!fileName.contains("docx")){
+            fileName=fileName+".docx";
+//            this.setAlwaysOnTop(false);
+//            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
+//            fileNameTxt.setText("");
+//            fileBox.setSelected(false);
+        }
+//        else{
             String dir = fDialog.getDirectory();
             String path=dir+fileName;
             fileNameTxt.setText(path);
             fileBox.setSelected(true);
-        }
+//        }
     }//GEN-LAST:event_browseFileNameActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
@@ -552,33 +546,10 @@ public class MainUI extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FullSc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-//<<<<<<< HEAD
-//        FullSc ss=new FullSc();
-       
-
-        
-//        System.out.println("Decorated?!"+ss.isUndecorated());
          this.setAlwaysOnTop(false);
          this.setState(1);
         FullSc.getObj().setVisible(true);
         
-//        this.setState(0);
-//        this.foc
-//        FloatingOnArea fa=new FloatingOnArea();
-//        fa.setVisible(true);
-//=======
-//        FullSc ss=new FullSc();
-//       
-//
-//        
-//        System.out.println("Decorated?!"+ss.isUndecorated());
-//        if(ss.isUndecorated()==true){
-////            ss.setUndecorated(false);
-//        }
-//        ss.setExtendedState(ss.MAXIMIZED_BOTH); 
-//        ss.setVisible(true);
-//>>>>>>> origin/master
-//         ss.setUndecorated(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**Taking the screenshot and save it as png file.
@@ -755,7 +726,6 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

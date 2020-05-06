@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 /**Tasks**/
-///////////need to add option message on each error which make Jframe not on top and close the form
 ///////////fix when to be on top and when not
 //// //////adjust send by E-mail feature
 package frames;
@@ -53,17 +52,12 @@ public class FullSc extends javax.swing.JFrame {
         
         initComponents();
         setExtendedState(this.MAXIMIZED_BOTH);
-         fullScImg.setOpaque(false);
-         x = y = x2 = y2 = 0; //
-         takingShot();
-         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//         System.out.println("width:"+screenSize.width+"Hight"+screenSize.height);
-
-//         System.out.println("width"+fullScImg.getSize().getWidth()+"Hight"+fullScImg.getSize().getHeight());
-         imgLbl.setIcon(new ImageIcon(new ImageIcon("fullScreen.png").getImage().getScaledInstance(fullScImg.getWidth(), fullScImg.getHeight(), Image.SCALE_SMOOTH)));
-                  imgLbl.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
-//                  System.out.println("width"+imgLbl.getWidth()+"Hight"+imgLbl.getHeight());
-//this.setState(0);
+        fullScImg.setOpaque(false);
+        x = y = x2 = y2 = 0; //
+        takingShot();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        imgLbl.setIcon(new ImageIcon(new ImageIcon("fullScreen.png").getImage().getScaledInstance(fullScImg.getWidth(), fullScImg.getHeight(), Image.SCALE_SMOOTH)));
+        imgLbl.setSize((int)screenSize.getWidth(), (int)screenSize.getHeight());
 
     }
     int x, y, x2, y2, pw, ph;
@@ -164,14 +158,14 @@ public class FullSc extends javax.swing.JFrame {
                 UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
                 
 
-            } catch (ClassNotFoundException ex) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
+                int result=JOptionPane.showConfirmDialog(null, ex.toString(),"Error", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE );
+                     if(result==JOptionPane.OK_OPTION){
+                         FullSc.getObj().close();
+                     }else{
+                         FullSc.getObj().close();
+                     }
             }
            
         }
@@ -185,7 +179,6 @@ public class FullSc extends javax.swing.JFrame {
         // TODO add your handling code here:
         setEndPoint(evt.getX(), evt.getY());
         repaint();
-        
         PopUpDemo menu = new PopUpDemo();
         menu.show(fullScImg, x2, y2);
         
@@ -294,7 +287,13 @@ public class FullSc extends javax.swing.JFrame {
 //            MainUI.shotName=MainUI.shotName+1; //increase shot name counter
 //            isFileSaved=false; //marked as there's unsaved data
         }catch(AWTException  | IOException e){
-            JOptionPane.showMessageDialog(null, e);
+//            JOptionPane.showMessageDialog(null, e);
+                int result=JOptionPane.showConfirmDialog(null, e.toString(),"Error", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE );
+                if(result==JOptionPane.OK_OPTION){
+                    FullSc.getObj().close();
+                }else{
+                        FullSc.getObj().close();
+                }
         }
     }
    
@@ -354,30 +353,32 @@ class PopUpDemo extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+//                    throw new IOException();
+                    
                     File shotFile=new File("fullScreen.png");
                     InputStream shotFile1=Files.newInputStream(Paths.get(shotFile.getAbsolutePath()));
-//                    BufferedImage bufferedImage = ImageIO.read(Files.newInputStream(Paths.get(shotFile.getAbsolutePath())));
                     BufferedImage bufferedImage = ImageIO.read(shotFile1);
-//                    FullSc ss=new FullSc();
                     BufferedImage crooped=bufferedImage.getSubimage(FullSc.getObj().xValue(), FullSc.getObj().yValue(), FullSc.getObj().pwValue(), FullSc.getObj().phValue()); 
-                   //create new file with name as shotName parameter and increment it by 1
                     ImageIO.write(crooped, "png", new File(MainUI.shotName+".png"));
                     shotFile1.close();
                     StoringCommShots storing=new StoringCommShots();
                     storing.setArr(MainUI.shotName+".png", "", MainUI.shotName);
                     MainUI.shotName=MainUI.shotName+1; //increase shot name counter
                     MainUI.isFileSaved=false; //marked as there's unsaved data
-                    //open the ImgView frame with the result
-                    //delete the old image
-//                    FullSc.getObj().setVisible(false);
-                    
-                    
+                   
                     FullSc.getObj().close();
                     
                     ImgView.getObj().setVisible(true);
                     ImgView.getObj().openLast();
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(PopUpDemo.class.getName()).log(Level.SEVERE, null, ex);
+                     int result=JOptionPane.showConfirmDialog(null, ex.toString(),"Error", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE );
+                     if(result==JOptionPane.OK_OPTION){
+                         FullSc.getObj().close();
+                     }else{
+                         FullSc.getObj().close();
+                     }
                 }
             }
             
@@ -400,11 +401,11 @@ class PopUpDemo extends JPopupMenu {
                 FullSc.getObj().close();                
             }
         });
-        JMenuItem email = new JMenuItem("Send By E-mail");
+//        JMenuItem email = new JMenuItem("Send By E-mail");
         add(save);
         add(reCapture);
         add(cancel);
-        add(email);
+//        add(email);
         
     }
     
