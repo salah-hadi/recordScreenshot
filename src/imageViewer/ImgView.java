@@ -3,9 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/**Tasks**/
-//////////////on closing imgPrview need to make MaiUI not minimized
-///working on save as and browse (in progress)
 package imageViewer;
 
 import java.awt.Image;
@@ -32,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import recordscreenshot.FileFormat;
 /**
  *
  * @author Salah
@@ -276,52 +274,19 @@ public class ImgView extends javax.swing.JFrame {
         fDialog.setVisible(true);
         
         String fileName=fDialog.getFile();
-        /////
-        ////return file extension
-        if(fileName.contains(".")){
-            int length=fileName.length();
-//            char searching;
-            int pointIndex=0;
-            for(int i=length-1;i>0;i--){
-                if(fileName.charAt(i)=='.'){
-                    pointIndex=i;
-                    break;
-                }
-            }
-            String extension=".png";/// make list of string to return value from 
-            if(pointIndex!=0||pointIndex!=length-1){
-                extension=fileName.substring(pointIndex,length);
-                if(!extension.equals(".png")){
-                    JOptionPane.showMessageDialog(null, "Kindly select/enter a 'png' file");
-                }else{
-                    String dir = fDialog.getDirectory();
-                    String path=dir+fileName;
-                    copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Enter valid file name.");
-            }            
-            
-            
-        }else{
-            String dir = fDialog.getDirectory();
-            String path=dir+fileName+".png";
+       
+        String dir = fDialog.getDirectory();
+        String path=dir+fileName;
+        FileFormat format=new FileFormat();
+//        System.out.println("File format is:"+format.getFormat(fileName));
+        if(format.getFormat(fileName).equals("doesn't have an extension")){
+            copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path+".png");
+        }else if(format.getFormat(fileName).equals("png")){
             copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
+        }else{
+            JOptionPane.showMessageDialog(null, "Kindly select a file with 'png' format.");
         }
-        /////
-//        System.out.println("contains:"+fileName.contains(".png"));
-//        boolean contains=fileName.contains(".png");
-////        if(!fileName.contains(".png")||!fileName.contains(".PNG")){
-//        if(contains==false){
-//            fileName=fileName+".png";
-//        }
-//
-//            String dir = fDialog.getDirectory();
-//            String path=dir+fileName;
-////            System.out.println("Path is:"+path);
-//            copyPasteImg(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1], path);
-////        }
-        
+
     }//GEN-LAST:event_saveAsbtnActionPerformed
 
     private void nxtbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nxtbtnActionPerformed

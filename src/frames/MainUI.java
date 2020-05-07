@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import recordscreenshot.FileFormat;
 import recordscreenshot.StoringCommShots;
 import recordscreenshot.writtingToWord;
 
@@ -355,7 +356,7 @@ public class MainUI extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(21, 21, 21))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(erroLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -503,22 +504,22 @@ public class MainUI extends javax.swing.JFrame {
         FileDialog fDialog = new FileDialog(this,"Save", FileDialog.SAVE);
         fDialog.setFile("*.docx");
         fDialog.setVisible(true);
-        //validate if the file name has extension or not.
-        //if not, get the file directory and select file name check box 
         String fileName=fDialog.getFile();
-        if(!fileName.contains("docx")){
-            fileName=fileName+".docx";
-//            this.setAlwaysOnTop(false);
-//            JOptionPane.showMessageDialog(null, "you can't insert '.' in File Name");
-//            fileNameTxt.setText("");
-//            fileBox.setSelected(false);
+        String dir = fDialog.getDirectory();
+        String path=dir+fileName;
+        
+        FileFormat format=new FileFormat();
+        if(format.getFormat(fileName).equals("docx")){
+            fileNameTxt.setText(path);           
+        }else if(format.getFormat(fileName).equals("doesn't have an extension")){
+            fileNameTxt.setText(path+".docx");
+        }else{
+            this.setAlwaysOnTop(false);
+            JOptionPane.showMessageDialog(null, "Kindly select a file with 'docx' format.");
+            fileNameTxt.setText("");
+            this.setAlwaysOnTop(true);
         }
-//        else{
-            String dir = fDialog.getDirectory();
-            String path=dir+fileName;
-            fileNameTxt.setText(path);
-            fileBox.setSelected(true);
-//        }
+        fileBox.setSelected(true);
     }//GEN-LAST:event_browseFileNameActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
