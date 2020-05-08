@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Storing screenshots and it's related comments
  */
 package recordscreenshot;
 
@@ -59,7 +57,7 @@ public class StoringCommShots {
     /**check if the entered value equal null or not
      @param  validate  the value you want to validate
      @return null or not*/
-    public boolean isNull(String validate){
+    private boolean isNull(String validate){
         boolean nn=false;
         try{
             if(validate.equals(null)){

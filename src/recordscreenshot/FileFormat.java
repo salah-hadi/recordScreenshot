@@ -1,8 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+This will extract file format from its name */
 package recordscreenshot;
 
 /**
@@ -11,7 +8,7 @@ package recordscreenshot;
  */
 public class FileFormat {
     
-    public String format(String name){
+    private String format(String name){
         String fileName=name.toLowerCase();
         String extension="doesn't have an extension";
         if(fileName.equals("png")){
@@ -116,11 +113,11 @@ public class FileFormat {
         return extension;
     }
     
+    /*return the format*/
     public String getFormat(String fileName){
         String extension="doesn't have an extension";
         if(fileName.contains(".")){
             int length=fileName.length();
-//            char searching;
             int pointIndex=0;
             for(int i=length-1;i>0;i--){
                 if(fileName.charAt(i)=='.'){

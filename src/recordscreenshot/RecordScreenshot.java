@@ -5,8 +5,8 @@
  */
 package recordscreenshot;
 
-import frames.FullSc;
 import frames.MainUI;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -22,28 +22,26 @@ public class RecordScreenshot extends MainUI{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        try {
         // TODO code application logic here
-//         writtingToWord wr=new writtingToWord();
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {           
                 //installing Jtatto theme
-                UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
-                
-
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
-            }
-           
+                UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");     
         }
-        MainUI mu=new MainUI();
-        mu.setVisible(true);
-        mu.setLocationRelativeTo(null);
+            MainUI.getObj().setVisible(true);
+            MainUI.getObj().setLocationRelativeTo(null);
+        } catch (IOException ex) {
+            Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(RecordScreenshot.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
 }

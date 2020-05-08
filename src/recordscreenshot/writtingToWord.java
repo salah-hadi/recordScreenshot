@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *Writting to word file
  */
 package recordscreenshot;
 
@@ -11,8 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -31,10 +27,8 @@ public class writtingToWord extends MainUI{
      @param fileName Word file name
      @param w Image width in word
      @param h Image Hight in word
-     @exception FileNotFoundException
-     @exception IOException
-     @exception InvalidFormatException*/
-    public writtingToWord(String fileName,int w,int h){
+     * @throws java.io.IOException*/
+    public writtingToWord(String fileName,int w,int h) throws IOException{
         try{
             storing.arrayValidator();
             XWPFDocument document=null;
@@ -69,9 +63,7 @@ public class writtingToWord extends MainUI{
                              run.addCarriageReturn();
 
                         }else if(!arrayVal1.isEmpty()&&!arrayVal0.isEmpty()){
-                            /////////////////////////////////////////////////////////////////
-                        //    run.setText(arrayVal1);
-                            
+
                             if(arrayVal1.contains("\n")){
                                 String[] stringsOnNewLines = arrayVal1.split( "\n" );
                                 for ( int i = 0; i < stringsOnNewLines.length; i++ ) {
@@ -90,10 +82,7 @@ public class writtingToWord extends MainUI{
                             }else{
                                 run.setText(arrayVal1);
                             }
-                            
-                            
-                            
-                  ////////////////////////////////////////          
+
                             run.addCarriageReturn();
 
                             imgFile=new File(arrayVal0);
@@ -120,21 +109,19 @@ public class writtingToWord extends MainUI{
                //renaming file after finising
                File f4=new File(fileName);
                if(f3.renameTo(f4)){
-//                   System.out.println("Renamed");
                }
-//               else{
-//                   System.out.println("error:"+f3.renameTo(f4));
-//               }
+
                
            }
             storing.afterArrValidator();
         }catch(FileNotFoundException e){
+            MainUI.getObj().setAlwaysOnTop(false);
             JOptionPane.showMessageDialog(null, e);
-            
-        }catch(IOException io){
+            MainUI.getObj().setAlwaysOnTop(true);
+        }catch(IOException | InvalidFormatException io){
+             MainUI.getObj().setAlwaysOnTop(false);
             JOptionPane.showMessageDialog(null, io);
-        }catch(InvalidFormatException oo){
-            JOptionPane.showMessageDialog(null, oo);
+            MainUI.getObj().setAlwaysOnTop(true);
         }
         
     }
