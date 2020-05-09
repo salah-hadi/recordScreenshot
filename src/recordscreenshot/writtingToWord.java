@@ -6,11 +6,11 @@ package recordscreenshot;
 import frames.MainUI;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JRuntimeException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -29,9 +29,11 @@ public class writtingToWord extends MainUI{
      @param h Image Hight in word
      * @throws java.io.IOException*/
     public writtingToWord(String fileName,int w,int h) throws IOException{
+        FileOutputStream out=null;
+        XWPFDocument document=null;
+         FileInputStream sl=null;
         try{
-            storing.arrayValidator();
-            XWPFDocument document=null;
+            storing.arrayValidator();           
             File f=new File(fileName);
             boolean existing=f.exists();
             if(existing==true){
@@ -40,18 +42,18 @@ public class writtingToWord extends MainUI{
                 document = new XWPFDocument(); 
             }
 
-            FileOutputStream out = new FileOutputStream( new File(fileName+"1"));
+            out = new FileOutputStream( new File(fileName+"1"));
             XWPFParagraph pa=document.createParagraph();
             XWPFRun run=pa.createRun();
 //            run.setText("Start document");
             run.addCarriageReturn();
             File imgFile;
             String imgFileName;
-            FileInputStream sl=null;
+           
             String arrayVal0;
             String arrayVal1;
                 for(int j=0;j<200;j++){
-                    storing.arrayValidator();
+//                    storing.arrayValidator();
                     arrayVal0=StoringCommShots.arr[0][j];
                     arrayVal1=StoringCommShots.arr[1][j];
                    
@@ -107,20 +109,36 @@ public class writtingToWord extends MainUI{
                }
                
                //renaming file after finising
-               File f4=new File(fileName);
-               if(f3.renameTo(f4)){
+//               File f4=new File(fileName);
+               if(f3.renameTo(f5)){
                }
 
                
            }
             storing.afterArrValidator();
-        }catch(FileNotFoundException e){
+        }catch(IllegalStateException|OpenXML4JRuntimeException e){
             MainUI.getObj().setAlwaysOnTop(false);
-            JOptionPane.showMessageDialog(null, e);
+            out.close();
+            sl.close();
+            document.close();
+            
+            JOptionPane.showMessageDialog(null, "Kindly close the opened word doc first");
+             File f6=new File(fileName+"1");
+             if(f6.exists()){
+                 f6.delete();
+             }
             MainUI.getObj().setAlwaysOnTop(true);
+            
         }catch(IOException | InvalidFormatException io){
              MainUI.getObj().setAlwaysOnTop(false);
+             out.close();
+            sl.close();
+            document.close();
             JOptionPane.showMessageDialog(null, io);
+            File f6=new File(fileName+"1");
+            if(f6.exists()){
+                 f6.delete();
+             }
             MainUI.getObj().setAlwaysOnTop(true);
         }
         

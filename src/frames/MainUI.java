@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JRuntimeException;
 import recordscreenshot.FileFormat;
 import recordscreenshot.RecordScreenshot;
 import recordscreenshot.StoringCommShots;
@@ -92,6 +93,7 @@ public class MainUI extends javax.swing.JFrame {
         newSessionMenu = new javax.swing.JMenuItem();
         saveMenu = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Screenshots recorder");
@@ -336,6 +338,14 @@ public class MainUI extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setText("About");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -371,9 +381,16 @@ public class MainUI extends javax.swing.JFrame {
         try {
             erroLbl.setText("");     
             save();
-        } catch (IOException ex) {
+        } catch (IOException|OpenXML4JRuntimeException|IllegalStateException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
-            erroLbl.setText(ex.toString());
+//            erroLbl.setText(ex.toString());
+             JOptionPane.showMessageDialog(null, "Kindly close the opened word doc first");
+             File f6=new File(fileNameTxt.getText()+"1");
+             if(f6.exists()){
+                 f6.delete();
+             }
+             
+            this.setAlwaysOnTop(true);
         }
     }//GEN-LAST:event_saveActionPerformed
 
@@ -514,9 +531,10 @@ public class MainUI extends javax.swing.JFrame {
             this.setAlwaysOnTop(false);
             JOptionPane.showMessageDialog(null, "Kindly select a file with 'docx' format.");
             fileNameTxt.setText("");
-            this.setAlwaysOnTop(true);
+//            this.setAlwaysOnTop(true);
         }
         fileBox.setSelected(true);
+        this.setAlwaysOnTop(true);
     }//GEN-LAST:event_browseFileNameActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
@@ -546,6 +564,15 @@ public class MainUI extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        this.setAlwaysOnTop(false);
+        this.setVisible(false);
+        AboutUpdate au=new AboutUpdate();
+        au.setLocationRelativeTo(null);
+        au.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**Taking the screenshot and save it as png file.
      @param  shotNameString Screenshot name 
@@ -743,6 +770,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JMenuItem newSessionMenu;

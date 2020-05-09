@@ -104,6 +104,9 @@
         <zipfileset src="lib/poi-ooxml-schemas-4.1.0.jar" excludes="META-INF/*" />
         <zipfileset src="lib/poi-scratchpad-4.1.0.jar" excludes="META-INF/*" />
         <zipfileset src="lib/xmlbeans-3.1.0.jar" excludes="META-INF/*" />
+        
+         <zipfileset src="lib/ini4j-0.5.4.jar" excludes="META-INF/*" />
+
 
  
         <manifest>      <!-- Create a new manifest file for this new jar file. -->

@@ -18,6 +18,22 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class RecordScreenshot extends MainUI{
 
+    
+    
+//    public boolean isUnlocked(String fileName){
+//        
+//        boolean isFileUnlocked = false;
+//        try {
+//            File verify=new File(fileName);
+//            org.apache.commons.io.FileUtils.touch(verify);
+//            isFileUnlocked = true;
+//        } catch (IOException e) {
+//            isFileUnlocked = false;
+//        }
+//        return isFileUnlocked;
+//    }
+//    
+//    
     /**
      * @param args the command line arguments
      */
