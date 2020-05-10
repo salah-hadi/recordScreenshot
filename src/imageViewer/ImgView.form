@@ -114,6 +114,8 @@
                               <Component id="saveAsbtn" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="edit" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="editApp" min="-2" pref="106" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -146,6 +148,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="saveAsbtn" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="edit" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="editApp" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jScrollPane2" min="-2" pref="69" max="-2" attributes="0"/>
@@ -256,6 +259,19 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="editApp">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="2">
+                    <StringItem index="0" value="MS paint"/>
+                    <StringItem index="1" value="Pixelitor"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

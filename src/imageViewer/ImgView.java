@@ -91,6 +91,7 @@ public class ImgView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         updateComments = new javax.swing.JButton();
         edit = new javax.swing.JButton();
+        editApp = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -164,6 +165,8 @@ public class ImgView extends javax.swing.JFrame {
             }
         });
 
+        editApp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MS paint", "Pixelitor" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -194,6 +197,8 @@ public class ImgView extends javax.swing.JFrame {
                         .addComponent(saveAsbtn)
                         .addGap(30, 30, 30)
                         .addComponent(edit)
+                        .addGap(18, 18, 18)
+                        .addComponent(editApp, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -219,7 +224,8 @@ public class ImgView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(saveAsbtn)
-                            .addComponent(edit)))
+                            .addComponent(edit)
+                            .addComponent(editApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50))
         );
@@ -346,7 +352,14 @@ public class ImgView extends javax.swing.JFrame {
         try {
             File testing= new File(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
             String fullPath=testing.getAbsolutePath();
-            painter(fullPath);
+            
+            String app=editApp.getSelectedItem().toString();
+            if(app.equals("MS paint")){
+                painter(fullPath);
+            }else if(app.equals("Pixelitor")){
+                imageEditor(fullPath);
+            }
+            
             settingIco(StoringCommShots.arr[0][Integer.parseInt(currPage.getText())-1]);
         } catch (IOException ex) {
             Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
@@ -542,8 +555,28 @@ public class ImgView extends javax.swing.JFrame {
             while (true) {
                 line = r.readLine();
                 if (line == null) { break; }
-                System.out.println(line);
+//                System.out.println(line);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //Image editor
+    public void imageEditor(String imgPath){
+           try {
+               String editorPath=new File("Pixelitor-4.2.4.jar").getAbsolutePath();
+                ProcessBuilder builder = new ProcessBuilder(
+                        "cmd.exe", "/c", "java -jar "+editorPath+" "+imgPath);
+                builder.redirectErrorStream(true);
+                Process p = builder.start();
+                BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                while (true) {
+                    line = r.readLine();
+                    if (line == null) { break; }
+    //                System.out.println(line);
+                }
         } catch (IOException ex) {
             Logger.getLogger(ImgView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -591,6 +624,7 @@ public class ImgView extends javax.swing.JFrame {
     private javax.swing.JLabel currPage;
     private javax.swing.JButton delBtn;
     private javax.swing.JButton edit;
+    private javax.swing.JComboBox<String> editApp;
     private javax.swing.JLabel imgPreviewLbl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

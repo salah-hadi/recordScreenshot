@@ -18,11 +18,14 @@
  */
 package frames;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -158,11 +161,14 @@ public class AboutUpdate extends javax.swing.JFrame {
     private String[] readIni(){
         String[] release= new String[2];
         try {
-            URL nnn=new URL("http://127.0.0.1/update.ini");
-            ReadableByteChannel rbc = Channels.newChannel(nnn.openStream());
-            FileOutputStream fos = new FileOutputStream("update.ini");
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+////            URL nnn=new URL("http://127.0.0.1/update.ini");
+//            URL nnn=new URL("https://egyptandmiddleeastit-my.sharepoint.com/personal/selhady_emeit_com/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fselhady%5Femeit%5Fcom%2FDocuments%2Fupdate%2Eini");
+////            ReadableByteChannel rbc = Channels.newChannel(nnn.openStream());
+//            ReadableByteChannel rbc = Channels.newChannel(read(nnn));
+//            FileOutputStream fos = new FileOutputStream("update.ini");
+//            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             
+            download("https://egyptandmiddleeastit-my.sharepoint.com/:u:/g/personal/selhady_emeit_com/EanWmMq1PzRFoM7_vy648gYB1V67a_XiBN-04faWIJqxzA?e=zI1X1h");
             Wini ini = new Wini(new File("update.ini"));
             
             String version = ini.get("Update", "Version", String.class);           
@@ -186,6 +192,38 @@ public class AboutUpdate extends javax.swing.JFrame {
             Logger.getLogger(AboutUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
         return release;
+    }
+    
+    private InputStream read(URL url) throws IOException {
+         HttpURLConnection httpcon=null;
+        try {
+            httpcon = (HttpURLConnection) url.openConnection();
+//            HttpURLConnection hr
+            httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+            httpcon.addRequestProperty("Content-Type", "application/octet-stream");
+            httpcon.addRequestProperty("Content-Disposition", "attachment");
+            httpcon.addRequestProperty("filename", "update.ini");
+
+          
+         } catch (IOException e) {
+            String error = e.toString();
+//          throw new RuntimeException(e);
+         }
+        return httpcon.getInputStream();
+}
+    
+    public void download(String url){
+        try (BufferedInputStream inputStream = new BufferedInputStream(new URL(url).openStream());
+        FileOutputStream fileOS = new FileOutputStream("update.ini")) {
+          byte data[] = new byte[1024];
+          int byteContent;
+          while ((byteContent = inputStream.read(data, 0, 1024)) != -1) {
+              fileOS.write(data, 0, byteContent);
+          }
+      } catch (IOException e) {
+            System.out.println("Exception:"+e);
+          // handles IO exceptions
+      }
     }
     /**
      * @param args the command line arguments

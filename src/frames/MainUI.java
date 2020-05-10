@@ -602,7 +602,7 @@ public class MainUI extends javax.swing.JFrame {
     private void validateComment(String shotName){
         if(commentsJtxtArea.isVisible()){
             String commentV=commentsJtxtArea.getText();
-            System.out.println("Comment is: "+commentsJtxtArea.getText());
+//            System.out.println("Comment is: "+commentsJtxtArea.getText());
             if(commentV.isEmpty()){
                 erroLbl.setText("you can't take screenshot without entering a comment.");
             }else{
