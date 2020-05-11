@@ -4,6 +4,7 @@
 
 package frames;
 
+import static frames.FullSc.area;
 import imageViewer.ImgView;
 import java.awt.AWTException;
 import java.awt.FileDialog;
@@ -11,6 +12,7 @@ import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -713,6 +715,11 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
    
+       public void close(){
+        WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);
+        mu=null;      
+       }
     /**
      * @param args the command line arguments
      */

@@ -18,14 +18,15 @@
  */
 package frames;
 
-import java.io.BufferedInputStream;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -62,6 +63,8 @@ public class AboutUpdate extends javax.swing.JFrame {
         update = new javax.swing.JButton();
         ver = new javax.swing.JLabel();
         buildNo = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        pix = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About");
@@ -86,6 +89,10 @@ public class AboutUpdate extends javax.swing.JFrame {
 
         buildNo.setText("1.2");
 
+        jLabel3.setText("Pixelitor");
+
+        pix.setText("V 2.4.3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,9 +104,11 @@ public class AboutUpdate extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pix)
                             .addComponent(buildNo)
                             .addComponent(ver, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(88, Short.MAX_VALUE))
@@ -117,7 +126,11 @@ public class AboutUpdate extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(buildNo))
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(pix))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         pack();
@@ -134,32 +147,51 @@ public class AboutUpdate extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        // TODO add your handling code here:
-        checkUpdate();
+        try {
+            // TODO add your handling code here:
+            checkUpdate();
+        } catch (IOException ex) {
+            Logger.getLogger(AboutUpdate.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }//GEN-LAST:event_updateActionPerformed
 
     
-    private void checkUpdate(){
+    private void checkUpdate() throws IOException{
         String version=ver.getText();
         String build=buildNo.getText();
+        String pixV=pix.getText();
+        
         String release[]=readIni();
         if(release[0].equals("Error connecting to server")){
             JOptionPane.showMessageDialog(null, "Error connecting to server");
 
         }else{
-            if((!version.equals(release[0])||(!build.equals(release[1])))){
+            if((!version.equals(release[0])||(!build.equals(release[1]))||(!pixV.equals(release[3])))){
                 JOptionPane.showMessageDialog(null, "New release is available.");
-
+                 MainUI.getObj().close();
+                 long pid = ProcessHandle.current().pid();
+//                 System.out.println("pid:"+pid);
+                 String editorPath=new File("updaterV1.1.jar").getAbsolutePath();
+                ProcessBuilder builder = new ProcessBuilder(
+                        "cmd.exe", "/c", "java -jar "+editorPath+" "+""+release[2]+""+" "+pid+" "+""+release[4]+"");
+                builder.redirectErrorStream(true);
+                Process p = builder.start();
+                
+                BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                while (true) {
+                    line = r.readLine();
+                    if (line == null) { break; }                   
+    //                System.out.println(line);
+                }
             }else{
                 JOptionPane.showMessageDialog(null, "There's no avilable updates.");
             }
-        }
-        
-                
+        }          
     }
     
     private String[] readIni(){
-        String[] release= new String[2];
+        String[] release= new String[5];
         try {
             URL nnn=new URL("http://127.0.0.1/update.ini");
 //            URL nnn=new URL("https://egyptandmiddleeastit-my.sharepoint.com/personal/selhady_emeit_com/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fselhady%5Femeit%5Fcom%2FDocuments%2Fupdate%2Eini");
@@ -168,15 +200,22 @@ public class AboutUpdate extends javax.swing.JFrame {
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             
             Wini ini = new Wini(new File("update.ini"));
-            
+    
             String version = ini.get("Update", "Version", String.class);           
             String build = ini.get("Update", "Build", String.class);
-            System.out.println("version"+version+" build:"+build);
-            if(version==null||build==null){
+            String newVersionUrl=ini.get("Update", "URL", String.class);            
+            String pixV=ini.get("Pixelitor","Version", String.class);
+            String pixUrl=ini.get("Pixelitor","URL", String.class);
+            
+//            System.out.println("version"+version+" build:"+build);
+            if(version==null||build==null||pixV==null){
                 release[0]="Error connecting to server";
             }else{
                 release[0]=version;
                 release[1]=build;
+                release[2]=newVersionUrl;
+                release[3]=pixV;
+                release[4]=pixUrl;
             }
             
         } catch (ConnectException ex) {
@@ -190,6 +229,11 @@ public class AboutUpdate extends javax.swing.JFrame {
             Logger.getLogger(AboutUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
         return release;
+    }
+    
+    public void close(){
+        WindowEvent winClosingEvent = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEve­ntQueue().postEvent(winClosingEvent);     
     }
     
 
@@ -234,6 +278,8 @@ public class AboutUpdate extends javax.swing.JFrame {
     private javax.swing.JLabel buildNo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel pix;
     private javax.swing.JButton update;
     private javax.swing.JLabel ver;
     // End of variables declaration//GEN-END:variables
