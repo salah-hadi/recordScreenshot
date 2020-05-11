@@ -5,7 +5,6 @@
 <ul>
   <li>Java JDK</li>
   <li>MS painter</li>
-  <li>MS word/Open office</li>
   </ul
   <div>
   <h5>Explanation</h5>
