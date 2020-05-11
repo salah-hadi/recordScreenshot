@@ -5,7 +5,7 @@
 <ul>
   <li>Java JDK</li>
   <li>MS painter</li>
-  <li>MS word</li>
+  <li>MS word/Open office</li>
   </ul
   <div>
   <h5>Explanation</h5>
@@ -27,6 +27,14 @@
     <li>Merge the new screenshots with the word file if it's existing.</li>
     <li>Adjusting Width and height for all screenshots in Word file before saving.</li>
   </ul>
+      </h5>OS:<h5>
+  <ul>
+    <li>Windows</li>
+    <li>Linux (Except editing with MS painter)</li>
+    <li>MAC (Except editing with MS painter)</li>
+  </ul>
+  <h5>License:</h5>
+  <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
   <footer>
     <p>Version: V1.0</p>
     <p>The used IDE: Netbeans 11.1</p>
