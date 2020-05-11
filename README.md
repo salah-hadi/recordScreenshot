@@ -14,6 +14,9 @@
   <p>If you have host just update "updaterUrl" in class:AboutUpdate, method:readIni()</p>
   <img src="https://github.com/salah-hadi/recordScreenshot/raw/master/src/icons/readMe.png">
   <p>Add <u>"update.ini"</u> file to your host and update the current parameters values.<p>
+  <p>you can update both screenshot recorder and Pixelitor, also you can update one of them only, just update Version, Build and URL parameters.</p>
+  <p>If there're no needed updates for one of them, just match Version and Build with the ones in application and give URL the value "updated".</p>
+  <img src="https://github.com/salah-hadi/recordScreenshot/raw/master/src/icons/readme2.png">
   </div>
   <h5>Application features</h5>
   <ul>
