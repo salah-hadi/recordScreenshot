@@ -196,9 +196,8 @@ public class AboutUpdate extends javax.swing.JFrame {
     private String[] readIni(){
         String[] release= new String[5];
         try {
-            URL nnn=new URL("http://127.0.0.1/update.ini");
-//            URL nnn=new URL("https://egyptandmiddleeastit-my.sharepoint.com/personal/selhady_emeit_com/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fselhady%5Femeit%5Fcom%2FDocuments%2Fupdate%2Eini");
-            ReadableByteChannel rbc = Channels.newChannel(nnn.openStream());
+            URL updaterUrl=new URL("http://127.0.0.1/update.ini");
+            ReadableByteChannel rbc = Channels.newChannel(updaterUrl.openStream());
             FileOutputStream fos = new FileOutputStream("update.ini");
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             
