@@ -168,22 +168,25 @@ public class AboutUpdate extends javax.swing.JFrame {
         }else{
             if((!version.equals(release[0])||(!build.equals(release[1]))||(!pixV.equals(release[3])))){
                 JOptionPane.showMessageDialog(null, "New release is available.");
-                 MainUI.getObj().close();
-                 long pid = ProcessHandle.current().pid();
-//                 System.out.println("pid:"+pid);
-                 String editorPath=new File("updaterV1.1.jar").getAbsolutePath();
-                ProcessBuilder builder = new ProcessBuilder(
-                        "cmd.exe", "/c", "java -jar "+editorPath+" "+""+release[2]+""+" "+pid+" "+""+release[4]+"");
-                builder.redirectErrorStream(true);
-                Process p = builder.start();
-                
-                BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                String line;
-                while (true) {
-                    line = r.readLine();
-                    if (line == null) { break; }                   
-    //                System.out.println(line);
+                int result=JOptionPane.showConfirmDialog(null, "New release is available, do you want to start download now?","Confirm Update", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE );
+                if(result==JOptionPane.YES_OPTION){
+                    MainUI.getObj().close();
+                    long pid = ProcessHandle.current().pid();
+   //                 System.out.println("pid:"+pid);
+                    String editorPath=new File("updaterV1.1.jar").getAbsolutePath();
+                   ProcessBuilder builder = new ProcessBuilder(
+                           "cmd.exe", "/c", "java -jar "+editorPath+" "+""+release[2]+""+" "+pid+" "+""+release[4]+"");
+                   builder.redirectErrorStream(true);
+                   Process p = builder.start();
+
+                   BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                   String line;
+                   while (true) {
+                       line = r.readLine();
+                       if (line == null) { break; }                   
+                   }
                 }
+                 
             }else{
                 JOptionPane.showMessageDialog(null, "There's no avilable updates.");
             }
