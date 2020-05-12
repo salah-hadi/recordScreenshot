@@ -32,8 +32,8 @@
       </h5>OS:<h5>
   <ul>
     <li>Windows</li>
-    <li>Linux (Except editing with MS painter)</li>
-    <li>MAC (Except editing with MS painter)</li>
+    <li>Linux (Except image editing)</li>
+    <li>MAC (Except image editing)</li>
   </ul>
   <h5>License:</h5>
   <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
