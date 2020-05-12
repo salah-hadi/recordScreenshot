@@ -1,6 +1,21 @@
+
 /*
- * will view the image and allow delete, update comments, edit using painter and save the image as.
- */
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License. */
 package imageViewer;
 
 import java.awt.Image;
@@ -547,7 +562,7 @@ public class ImgView extends javax.swing.JFrame {
     private void painter(String imgPath){
         try {
             ProcessBuilder builder = new ProcessBuilder(
-                    "cmd.exe", "/c", "mspaint "+imgPath);
+                    "cmd.exe", "/c", "mspaint \""+imgPath+"\"");
             builder.redirectErrorStream(true);
             Process p = builder.start();
             BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -567,7 +582,7 @@ public class ImgView extends javax.swing.JFrame {
            try {
                String editorPath=new File("Pixelitor-4.2.4.jar").getAbsolutePath();
                 ProcessBuilder builder = new ProcessBuilder(
-                        "cmd.exe", "/c", "java -jar "+editorPath+" "+imgPath);
+                        "cmd.exe", "/c", "java -jar \""+editorPath+"\" \""+imgPath+"\"");
                 builder.redirectErrorStream(true);
                 Process p = builder.start();
                 BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
