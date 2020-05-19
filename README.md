@@ -36,7 +36,6 @@
     <li>MAC (Except image editing)</li>
   </ul>
   <h5>License:</h5>
-  <p>Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
   <footer>
     <p>Version: V1.0</p>
     <p>The used IDE: Netbeans 11.1</p>
