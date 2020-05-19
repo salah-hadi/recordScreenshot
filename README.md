@@ -35,7 +35,6 @@
     <li>Linux (Except image editing)</li>
     <li>MAC (Except image editing)</li>
   </ul>
-  <h5>License:</h5>
   <footer>
     <p>Version: V1.0</p>
     <p>The used IDE: Netbeans 11.1</p>
